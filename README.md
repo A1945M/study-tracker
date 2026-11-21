@@ -1,2 +1,2 @@
-# study-tracker
+# index.html
 Personal Study
