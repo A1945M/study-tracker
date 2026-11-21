@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ثبت و تحلیل مطالعه</title>
+<meta name="theme-color" content="#4f46e5">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
 <style>
 :root{--bg:#f3f4f9;--card:#fff;--text:#1c2030;--muted:#6b7285;--line:#e3e6ef;--accent:#4f6bed;--accent-soft:#e8ecfd;--good:#12a37a;--bad:#e5484d;--warn:#e08a00;--shadow:0 1px 3px rgba(20,25,50,.08)}
 @media (prefers-color-scheme:dark){:root{--bg:#0e1120;--card:#181c2e;--text:#e9ecf6;--muted:#98a1ba;--line:#283050;--accent:#7b93ff;--accent-soft:#222b55;--good:#3ecf9f;--bad:#ff6b70;--warn:#f5b84a;--shadow:none}}
@@ -169,21 +171,30 @@ main{padding-bottom:88px}
 .rtw{display:flex;gap:5px;margin-top:6px}
 @media(max-width:700px){header nav{overflow-x:auto;justify-content:flex-start}nav button{flex:1 0 54px}}
 .wsvg{width:130px;height:130px}.wallmini{display:flex;justify-content:center;margin-bottom:12px}
+.moreg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.morebtn{font:inherit;display:flex;align-items:center;gap:10px;padding:16px 12px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--text);cursor:pointer;font-weight:700}.morebtn span{font-size:22px}
+.syt{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid var(--line)}.syt .n{flex:1;min-width:0}.sst{font:inherit;font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid var(--line);background:var(--bg);color:var(--muted);cursor:pointer;white-space:nowrap}.sst.s1{background:#dbeafe;color:#1e40af}.sst.s2{background:#fef3c7;color:#92400e}.sst.s3{background:var(--good);color:#fff;border-color:var(--good)}
+.wk{display:flex;gap:6px;align-items:flex-end;height:90px;margin:10px 0 4px}.wk div{flex:1;text-align:center;font-size:11px;color:var(--muted)}.wk i{display:block;background:var(--accent);border-radius:5px 5px 0 0;min-height:2px;margin-bottom:3px}
+:root[data-theme=light]{--bg:#f3f4f9;--card:#fff;--text:#1c2030;--muted:#6b7285;--line:#e3e6ef;--accent:#4f6bed;--accent-soft:#e8ecfd;--good:#12a37a;--bad:#e5484d;--warn:#e08a00;--shadow:0 1px 3px rgba(20,25,50,.08)}
+:root[data-theme=dark]{--bg:#0e1120;--card:#181c2e;--text:#e9ecf6;--muted:#98a1ba;--line:#283050;--accent:#7b93ff;--accent-soft:#222b55;--good:#3ecf9f;--bad:#ff6b70;--warn:#f5b84a;--shadow:none}
+.noanim *{transition:none!important;animation:none!important}
+.card table td{padding:7px 4px;border-top:1px solid var(--line)}
+.paper{background:#fdf6e3;color:#3a3a3a;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.25)}.paper input,.paper textarea{background:transparent;border:0;color:inherit;width:100%;font:inherit;outline:0}.paper textarea{min-height:140px;line-height:28px;background:repeating-linear-gradient(transparent,transparent 27px,#e4cfae 28px)}.paper .pt{font-weight:800;border-bottom:2px solid #e5a8a8;margin-bottom:6px}
+.actc{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.actc .n{flex:1;min-width:0}.actT{font-size:20px;font-weight:800;direction:ltr;font-variant-numeric:tabular-nums}
+#hdrClock{margin-top:-6px;margin-bottom:-6px}#hdrClock .wsvg{width:64px;height:64px;filter:none}
+.card.slim{padding:8px 12px}
+.card.cd{padding:8px 14px!important;align-items:center}.card.cd b{font-size:24px!important;line-height:1.2;color:var(--accent)}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-<h1>📚 ثبت و تحلیل مطالعه</h1>
+<div><h1>📚 ثبت و تحلیل مطالعه</h1><div id="hdrDate" class="muted small" style="margin-top:2px"></div></div>
+<div id="hdrClock" style="margin-inline-start:auto;line-height:0"></div>
 <nav>
 <button data-v="today" onclick="setView('today')"><span class="ic">⏱</span>امروز</button>
 <button data-v="plan" onclick="setView('plan')"><span class="ic">📅</span>برنامه</button>
-<button data-v="routine" onclick="setView('routine')"><span class="ic">🔄</span>روتین</button>
-<button data-v="analysis" onclick="setView('analysis')"><span class="ic">📊</span>تحلیل</button>
 <button data-v="exams" onclick="setView('exams')"><span class="ic">📝</span>آزمون</button>
-<button data-v="mistakes" onclick="setView('mistakes')"><span class="ic">🎯</span>نقاط ضعف</button>
-<button data-v="league" onclick="setView('league')"><span class="ic">🏆</span>رقابت</button>
-<button data-v="history" onclick="setView('history')"><span class="ic">🗂</span>تاریخچه</button>
-<button data-v="settings" onclick="setView('settings')"><span class="ic">⚙️</span>تنظیمات</button>
+<button data-v="analysis" onclick="setView('analysis')"><span class="ic">📊</span>تحلیل</button>
+<button data-v="more" onclick="setView('more')"><span class="ic">☰</span>بیشتر</button>
 </nav></div></header>
 <main id="app"></main>
 <div class="alertbar" id="alertBar"></div>
@@ -249,12 +260,12 @@ const PRESET={
 'عربی':['ترجمه','قواعد','تحلیل صرفی','درک مطلب'],
 'دین و زندگی':['مفاهیم','ترجمه آیات','قرابت معنایی'],
 'زبان انگلیسی':['گرامر','لغت','کلوز تست','درک مطلب']};
-function defaultState(){return{v:1,sessions:[],days:{},settings:{dailyGoalMin:480,subjects:DEFAULT_SUBJECTS.map((n,i)=>({name:n,color:COLORS[i],goalH:0})),lastBackup:null,examCoef:{'ریاضی':4,'فیزیک':4,'شیمی':3},examSubjects:['ریاضی','فیزیک','شیمی'],alert:{every:0,sound:true,notify:true},konkurDate:''},timer:{status:'idle',startedAt:0,accumMs:0,subject:'',topic:'',note:'',dayKey:'',lastBlock:0},exams:[],mistakes:[],plan:[],routine:{items:[],log:{}},examDraft:null,examTimers:{exam:{status:'idle',startedAt:0,accumMs:0,alertMin:0,alerted:false},analysis:{status:'idle',startedAt:0,accumMs:0,target:'draft',alertMin:0,alerted:false}}}}
+function defaultState(){return{v:1,sessions:[],days:{},settings:{dailyGoalMin:480,subjects:DEFAULT_SUBJECTS.map((n,i)=>({name:n,color:COLORS[i],goalH:0})),lastBackup:null,ui:{accent:"",mode:"auto",noAnim:false,vib:true},examCoef:{'ریاضی':4,'فیزیک':4,'شیمی':3},examSubjects:['ریاضی','فیزیک','شیمی'],alert:{every:0,sound:true,notify:true},konkurDate:''},timer:{status:'idle',startedAt:0,accumMs:0,subject:'',topic:'',note:'',dayKey:'',lastBlock:0},exams:[],mistakes:[],plan:[],routine:{items:[],log:{}},syllabus:{},acts:[],actRun:null,actLog:[],notes:[],attend:{wakeBy:"08:00",reportBy:"23:59",log:{}},examDraft:null,examTimers:{exam:{status:'idle',startedAt:0,accumMs:0,alertMin:0,alerted:false},analysis:{status:'idle',startedAt:0,accumMs:0,target:'draft',alertMin:0,alerted:false}}}}
 function merge(o){const d=defaultState();const r=Object.assign(d,o,{settings:Object.assign(d.settings,o.settings||{}),timer:Object.assign(d.timer,o.timer||{})});
 r.settings.alert=Object.assign({every:0,sound:true,notify:true},r.settings.alert||{});r.settings.examCoef=r.settings.examCoef||{};
 if(!Array.isArray(r.settings.examSubjects)||!r.settings.examSubjects.length)r.settings.examSubjects=['ریاضی','فیزیک','شیمی'];
 const dt=defaultState().examTimers;['exam','analysis'].forEach(k=>r.examTimers[k]=Object.assign({},dt[k],(o&&o.examTimers&&o.examTimers[k])||{}));
-['sessions','exams','mistakes','plan'].forEach(k=>{if(!Array.isArray(r[k]))r[k]=[]});if(!r.routine||!Array.isArray(r.routine.items))r.routine={items:[],log:{}};r.routine.log=r.routine.log||{};return r}
+['sessions','exams','mistakes','plan'].forEach(k=>{if(!Array.isArray(r[k]))r[k]=[]});if(!r.routine||!Array.isArray(r.routine.items))r.routine={items:[],log:{}};r.routine.log=r.routine.log||{};if(!r.syllabus||typeof r.syllabus!=='object'||Array.isArray(r.syllabus))r.syllabus={};r.settings=r.settings||{};r.settings.ui=Object.assign({accent:'',mode:'auto',noAnim:false,vib:true},r.settings.ui||{});if(!Array.isArray(r.acts))r.acts=[];if(!Array.isArray(r.actLog))r.actLog=[];if(!Array.isArray(r.notes))r.notes=[];if(!r.attend||typeof r.attend!=='object')r.attend={};r.attend=Object.assign({wakeBy:'08:00',reportBy:'23:59'},r.attend);r.attend.log=r.attend.log||{};return r}
 function load(){try{const r=localStorage.getItem(KEY);if(r)return merge(JSON.parse(r))}catch(e){}return defaultState()}
 let S=load();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('ذخیره‌سازی ممکن نشد! از داده‌ها پشتیبان بگیر.')}cloudQueue()}
@@ -288,7 +299,7 @@ function timerPause(){const t=S.timer;if(t.status==='running'){t.accumMs=elapsed
 function timerStop(){const t=S.timer;if(t.status==='running'){t.accumMs=elapsedMs();t.status='paused';t.startedAt=0;save()}render();openSession({fromTimer:true})}
 function timerReset(){Object.assign(S.timer,{status:'idle',startedAt:0,accumMs:0,topic:'',note:'',dayKey:'',lastBlock:0});save();document.title='ثبت و تحلیل مطالعه'}
 function timerDiscard(){if(confirm('تایمر فعلی بدون ثبت پاک بشه؟')){timerReset();render()}}
-function tick(){updWall();const e=$('clock');if(S.timer.status==='running'){if(e)e.textContent=clock(elapsedMs());document.title='⏱ '+clock(elapsedMs());checkAlerts()}
+function tick(){updWall();updActs();const e=$('clock');if(S.timer.status==='running'){if(e)e.textContent=clock(elapsedMs());document.title='⏱ '+clock(elapsedMs());checkAlerts()}
 ['exam','analysis'].forEach(k=>{if(S.examTimers&&S.examTimers[k].status==='running'){const c=$('clk_'+k);if(c)c.textContent=clock(exEl(k));if(S.timer.status!=='running')document.title='⏱ '+(k==='exam'?'آزمون ':'تحلیل ')+clock(exEl(k));checkExAlert(k)}});}
 setInterval(tick,1000);
 
@@ -337,8 +348,8 @@ function delSession(id){if(confirm('این جلسه حذف بشه؟')){S.session
 let view='today',aRange='week',topicSort='time',hSub='',hQ='',hLimit=60,showReport=false;
 const app=$('app');
 function setView(v){view=v;render();window.scrollTo(0,0);if(v==='league'&&typeof lgRefresh==='function')lgRefresh(false)}
-function render(){const nv=document.querySelector('header nav');if(!AUTH){nv.style.display='none';app.innerHTML=authView();return}nv.style.display='';document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===view));
-syncEx();const V={today:viewToday,plan:viewPlan,analysis:viewAnalysis,exams:viewExams,mistakes:viewMistakes,routine:viewRoutine,league:viewLeague,history:viewHistory,settings:viewSettings};app.innerHTML=(V[view]||viewToday)();
+function render(){const nv=document.querySelector('header nav');if(!AUTH){nv.style.display='none';$('hdrClock').innerHTML='';$('hdrDate').textContent='';app.innerHTML=authView();return}nv.style.display='';applyUI();$('hdrClock').innerHTML=wallCard();$('hdrDate').textContent=jDate(todayKey());document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===(MORE.includes(view)?'more':view)));
+syncEx();const V={today:viewToday,plan:viewPlan,analysis:viewAnalysis,exams:viewExams,mistakes:viewMistakes,more:viewMore,acts:viewActs,attend:viewAttend,notes:viewNotes,syllabus:viewSyllabus,routine:viewRoutine,league:viewLeague,history:viewHistory,settings:viewSettings};app.innerHTML=(V[view]||viewToday)();
 if(view==='exams')exCalc();updWall()}
 
 function sessRow(s,showDate){const tx=s.tests?` · ${fa(s.tests)} تست${s.correct!=null||s.wrong!=null?' ('+fa(s.correct||0)+' درست، '+fa(s.wrong||0)+' غلط)':''}`:'';
@@ -351,7 +362,7 @@ const goal=S.settings.dailyGoalMin*60,pct=goal?Math.min(100,a.sec/goal*100):0,t=
 if(!subs.find(s=>s.name===t.subject))t.subject=subs[0]?subs[0].name:'';
 const st=t.status;
 const banner=(S.sessions.length||S.exams.length||S.mistakes.length)&&(!S.settings.lastBackup||diffDays(S.settings.lastBackup,tk)>=7)?`<div class="banner"><span>اطلاعاتت فقط توی همین مرورگر ذخیره می‌شه. بهتره یه نسخه‌ی پشتیبان بگیری.</span><button class="btn sm" onclick="exportData()">دانلود پشتیبان</button></div>`:'';
-return`${banner}${wallCard()}${countdownHTML()}${forgotBanner()}
+return`${countdownHTML()}${banner}${gameCard()}${attendCard()}${forgotBanner()}
 <section class="card timer">
 <div class="row"><select onchange="timerField('subject',this.value)">${subs.map(s=>`<option ${s.name===t.subject?'selected':''}>${esc(s.name)}</option>`).join('')}</select>
 <input list="tTopics" placeholder="مبحث" value="${esc(t.topic)}" oninput="timerField('topic',this.value)"></div>
@@ -479,7 +490,7 @@ return`<section class="card"><div class="row"><select onchange="hSub=this.value;
 <section class="card">${shown.length?html:'<div class="empty">موردی نیست</div>'}${list.length>shown.length?`<div style="text-align:center;margin-top:12px"><button class="btn ghost" onclick="hLimit+=60;render()">نمایش بیشتر</button></div>`:''}</section>`}
 
 function viewSettings(){const ss=S.settings;
-return`${accountCard()}<section class="card"><h2>هدف روزانه</h2><div class="row"><input id="goalH" inputmode="decimal" value="${fa(+(ss.dailyGoalMin/60).toFixed(2))}"><span class="muted" style="flex:0 0 auto">ساعت در روز</span><button class="btn" style="flex:0 0 auto" onclick="setGoal()">ذخیره</button></div></section>
+return`${accountCard()}${themeCard()}<section class="card"><h2>هدف روزانه</h2><div class="row"><input id="goalH" inputmode="decimal" value="${fa(+(ss.dailyGoalMin/60).toFixed(2))}"><span class="muted" style="flex:0 0 auto">ساعت در روز</span><button class="btn" style="flex:0 0 auto" onclick="setGoal()">ذخیره</button></div></section>
 <section class="card"><h2>⏳ تاریخ کنکور</h2><div class="muted small" style="margin-bottom:8px">برای شمارش معکوس توی صفحه‌ی «امروز». تاریخ دقیقش رو از اطلاعیه‌ی سازمان سنجش بردار.</div>
 ${jPickG('kz',ss.konkurDate||todayKey(),toJ(todayKey()).jy,toJ(todayKey()).jy+3)}
 <div class="row fit" style="margin-top:10px"><button class="btn" onclick="setKonkur()">ذخیره</button>${ss.konkurDate?'<button class="btn ghost" onclick="clearKonkur()">حذف تاریخ</button>':''}</div></section>
@@ -768,11 +779,11 @@ else{m.stage=0;m.next=addDays(tk,1)}
 m.lastReview=tk;save();render()}
 function dueMistakes(){const tk=todayKey();return S.mistakes.filter(m=>!m.done&&m.next&&m.next<=tk)}
 function dueCard(){const n=dueMistakes().length;if(!n)return'';
-return`<section class="card"><div class="row" style="justify-content:space-between"><span>🎯 <b>${fa(n)}</b> مبحث ضعیف برای مرور امروز منتظرته</span><button class="btn ghost sm" style="flex:0 0 auto" onclick="setView('mistakes')">مرور</button></div></section>`}
+return`<section class="card"><div class="row" style="justify-content:space-between"><span>🎯 <b>${fa(n)}</b> مبحث ضعیف برای مرور امروز منتظرته</span><button class="btn ghost sm" style="flex:0 0 auto" onclick="mkDueToPlan()">📅 به برنامه</button><button class="btn ghost sm" style="flex:0 0 auto" onclick="setView('mistakes')">مرور</button></div></section>`}
 function mkBody(m){const tk=todayKey();
 return`<div><i class="dot" style="background:${subjColor(m.subject)}"></i><b>${esc(m.subject)}</b> – ${esc(m.topic||m.source||'(بدون مبحث)')}</div>
 <div class="small muted">${jDate(m.date,true)}${m.done?' · ✅ مسلط شد':m.next?' · مرور بعدی: '+(m.next<=tk?'امروز':jDate(m.next,true)):''}</div>${m.note?`<div class="small" style="margin-top:4px;white-space:pre-wrap">📝 ${esc(m.note)}</div>`:''}`}
-function mkRow(m){return`<div class="mst">${mkBody(m)}<div class="row fit" style="margin-top:6px"><button class="btn ghost sm" onclick="mkEdit('${m.id}')">ویرایش</button><button class="btn ghost sm" onclick="mkDel('${m.id}')">حذف</button>${m.done?`<button class="btn ghost sm" onclick="mkReopen('${m.id}')">برگردوندن به مرور</button>`:`<button class="btn ghost sm" onclick="mkMaster('${m.id}')">مسلط شدم</button>`}</div></div>`}
+function mkRow(m){return`<div class="mst">${mkBody(m)}<div class="row fit" style="margin-top:6px"><button class="btn ghost sm" onclick="mkEdit('${m.id}')">ویرایش</button><button class="btn ghost sm" onclick="mkDel('${m.id}')">حذف</button>${m.done?'':`<button class="btn ghost sm" onclick="mkPlan('${m.id}')">📅 به برنامه‌ی امروز</button>`}${m.done?`<button class="btn ghost sm" onclick="mkReopen('${m.id}')">برگردوندن به مرور</button>`:`<button class="btn ghost sm" onclick="mkMaster('${m.id}')">مسلط شدم</button>`}</div></div>`}
 function mkAnalysis(){const all=S.mistakes,n=all.length;if(!n)return'';
 const act=all.filter(m=>!m.done),byS={};act.forEach(m=>byS[m.subject]=(byS[m.subject]||0)+1);const mx=Math.max(1,...Object.values(byS));
 return`<section class="card"><h2>📊 وضعیت نقاط ضعف</h2><div class="grid"><div class="kpi"><b>${fa(n)}</b><span>کل مباحث ثبت‌شده</span></div><div class="kpi"><b>${fa(act.length)}</b><span>هنوز در حال مرور</span></div><div class="kpi"><b class="good">${fa(n-act.length)}</b><span>مسلط شدی</span></div><div class="kpi"><b>${fa(dueMistakes().length)}</b><span>مرور امروز</span></div></div>
@@ -802,12 +813,12 @@ return`<div class="daysum">${min?'⏱ '+dur(min*60)+' · ':''}${fa(cats)} دست
 
 /* ======================= ساعت دیواری ======================= */
 let wallKey=todayKey();
-function wallCard(){const tk=todayKey(),j=toJ(tk);wallKey=tk;let face='';
-for(let i=1;i<=12;i++){const a=i*Math.PI/6;face+=`<text x="${(100+72*Math.sin(a)).toFixed(1)}" y="${(107-72*Math.cos(a)).toFixed(1)}" text-anchor="middle" font-size="19" font-weight="700" style="fill:var(--text)">${i}</text>`}
-const ln=(id,y2,w,c)=>`<line id="${id}" x1="100" y1="${id==='sh'?112:104}" x2="100" y2="${y2}" stroke-width="${w}" stroke-linecap="round" style="stroke:${c}"/>`;
-return`<div class="wallmini"><svg id="wallSvg" class="wsvg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="97" stroke-width="5" style="fill:var(--card);stroke:var(--accent)"/>${face}
-<rect x="48" y="118" width="104" height="46" rx="10" style="fill:var(--bg);stroke:var(--line)"/><text x="100" y="139" text-anchor="middle" font-size="20" font-weight="700" style="fill:var(--accent)">${WEEKDAYS[wdIdx(tk)]}</text><text x="100" y="158" text-anchor="middle" font-size="17" style="fill:var(--text)">${j.jd} ${MONTHS[j.jm-1]}</text>
-${ln('hh',56,5,'var(--text)')}${ln('mh',32,3.5,'var(--text)')}${ln('sh',24,1.5,'var(--bad)')}<circle cx="100" cy="100" r="5" style="fill:var(--accent)"/></svg></div>`}
+function wallCard(){wallKey=todayKey();let f='';
+[[12,0],[3,90],[6,180],[9,270]].forEach(([n,d])=>{const a=d*Math.PI/180;f+=`<text x="${(100+72*Math.sin(a)).toFixed(1)}" y="${(110-72*Math.cos(a)).toFixed(1)}" text-anchor="middle" font-size="30" font-weight="800" style="fill:var(--text)">${n}</text>`});
+for(let i=1;i<12;i++)if(i%3){const a=i*Math.PI/6;f+=`<circle cx="${(100+80*Math.sin(a)).toFixed(1)}" cy="${(100-80*Math.cos(a)).toFixed(1)}" r="4" style="fill:var(--muted)"/>`}
+const ln=(id,y2,w,c)=>`<line id="${id}" x1="100" y1="${id==='sh'?116:104}" x2="100" y2="${y2}" stroke-width="${w}" stroke-linecap="round" style="stroke:${c}"/>`;
+return`<svg id="wallSvg" class="wsvg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" stroke-width="7" style="fill:var(--card);stroke:var(--accent)"/>${f}
+${ln('hh',52,8,'var(--text)')}${ln('mh',30,6,'var(--text)')}${ln('sh',18,2.5,'var(--bad)')}<circle cx="100" cy="100" r="8" style="fill:var(--accent)"/></svg>`}
 function updWall(){if(!$('wallSvg'))return;const d=new Date(),s=d.getSeconds(),m=d.getMinutes()+s/60,h=d.getHours()%12+m/60;
 $('hh').setAttribute('transform','rotate('+h*30+' 100 100)');$('mh').setAttribute('transform','rotate('+m*6+' 100 100)');$('sh').setAttribute('transform','rotate('+s*6+' 100 100)');
 if(wallKey!==todayKey())render()}
@@ -853,22 +864,31 @@ function setAuth(j){AUTH={access_token:j.access_token,refresh_token:j.refresh_to
 async function sbToken(){if(AUTH.expires_at*1000-Date.now()<60000){const j=await sbReq('/auth/v1/token?grant_type=refresh_token','POST',{refresh_token:AUTH.refresh_token});j.user=j.user||{id:AUTH.user.id,email:AUTH.user.email,user_metadata:{username:AUTH.user.username}};setAuth(j)}return AUTH.access_token}
 let authMode='login',authErr='',authInfo='',authKeep={u:'',e:''},cqT=null,cpBusy=false,cver=0,syncState='';
 const authMsg=m=>({'Invalid login credentials':'ایمیل یا رمز عبور اشتباهه.','User already registered':'این ایمیل قبلاً ثبت‌نام کرده.','Email not confirmed':'ایمیلت هنوز تأیید نشده؛ لینک تأیید رو توی ایمیلت باز کن.'}[m]||(/rate limit/i.test(m)?'تعداد تلاش زیاد بود؛ چند دقیقه بعد دوباره امتحان کن.':/Failed to fetch|NetworkError/i.test(m)?'به سرور وصل نشد؛ اینترنت یا فیلترشکن رو چک کن.':m));
-function authView(){const su=authMode==='signup';
-return`<section class="card" style="max-width:420px;margin:30px auto"><h2 style="text-align:center">📚 ${su?'ساخت حساب جدید':'ورود به حساب'}</h2><form onsubmit="return authSubmit(event)">
+function authView(){const m=authMode,su=m==='signup',fg=m==='forgot',np=m==='newpass';
+const ttl=np?'🔑 رمز جدید':fg?'🔑 فراموشی رمز':su?'📚 ساخت حساب جدید':'📚 ورود به حساب';
+return`<section class="card" style="max-width:420px;margin:30px auto"><h2 style="text-align:center">${ttl}</h2><form onsubmit="return authSubmit(event)">
 ${su?`<label class="f">نام کاربری</label><input id="au_u" autocomplete="username" maxlength="20" value="${esc(authKeep.u)}">`:''}
-<label class="f">ایمیل</label><input id="au_e" type="email" dir="ltr" autocomplete="email" required value="${esc(authKeep.e)}">
-<label class="f">رمز عبور (حداقل 6 حرف)</label><input id="au_p" type="password" dir="ltr" autocomplete="${su?'new-password':'current-password'}" required minlength="6">
+${np?'':`<label class="f">ایمیل</label><input id="au_e" type="email" dir="ltr" autocomplete="email" required value="${esc(authKeep.e)}">`}
+${fg?'':`<label class="f">${np?'رمز جدید':'رمز عبور'} (حداقل 6 حرف)</label><input id="au_p" type="password" dir="ltr" autocomplete="${m==='login'?'current-password':'new-password'}" required minlength="6">`}
 ${authErr?`<div class="ins bad" style="margin-top:10px">${esc(authErr)}</div>`:''}${authInfo?`<div class="ins good" style="margin-top:10px">${esc(authInfo)}</div>`:''}
-<div class="row fit" style="margin-top:14px"><button class="btn">${su?'ثبت‌نام':'ورود'}</button><button type="button" class="btn ghost" onclick="authMode='${su?'login':'signup'}';authErr='';authInfo='';render()">${su?'حساب دارم':'ساخت حساب جدید'}</button></div></form>
-<div class="muted small" style="margin-top:12px">اطلاعات مطالعه‌ات به حسابت وصل می‌شه و از هر دستگاهی با همین ایمیل و رمز بالا میاد.</div></section>`}
-async function authSubmit(ev){ev.preventDefault();const su=authMode==='signup',em=val('au_e').trim(),pw=val('au_p'),un=su?val('au_u').trim():'';authKeep={u:un,e:em};authErr='';authInfo='';
+<div class="row fit" style="margin-top:14px"><button class="btn">${np?'ذخیره‌ی رمز':fg?'ارسال لینک بازیابی':su?'ثبت‌نام':'ورود'}</button>${np?'':`<button type="button" class="btn ghost" onclick="authMode='${m==='login'?'signup':'login'}';authErr='';authInfo='';render()">${m==='login'?'ساخت حساب جدید':'حساب دارم'}</button>`}</div></form>
+${m==='login'?`<div style="margin-top:12px"><a href="#" onclick="authMode='forgot';authErr='';authInfo='';render();return false">رمزم رو فراموش کردم</a></div>`:''}</section>`}
+let PEND=null;
+async function enterApp(){KEY='studyTracker.v1.'+AUTH.user.id;S=load();authKeep={u:'',e:''};render();await cloudPull(true);render()}
+async function authSubmit(ev){ev.preventDefault();const m=authMode,su=m==='signup',em=m==='newpass'?'':val('au_e').trim(),pw=m==='forgot'?'':val('au_p'),un=su?val('au_u').trim():'';authKeep={u:un,e:em};authErr='';authInfo='';
 if(su&&(un.length<2||un.length>20)){authErr='نام کاربری ۲ تا ۲۰ حرف باشه.';render();return}
-const bt=ev.target.querySelector('button');bt.disabled=true;
-try{let j;if(su){j=await sbReq('/auth/v1/signup','POST',{email:em,password:pw,data:{username:un}});
+ev.target.querySelector('button').disabled=true;
+try{if(m==='forgot'){await sbReq('/auth/v1/recover?redirect_to='+encodeURIComponent(location.origin+location.pathname),'POST',{email:em});authMode='login';authInfo='اگه این ایمیل حساب داشته باشه، لینک بازیابی براش فرستاده شد. ایمیلت (و اسپم) رو چک کن.';render();return}
+if(m==='newpass'){await sbReq('/auth/v1/user','PUT',{password:pw},PEND.access_token);setAuth(PEND);PEND=null;authMode='login';await enterApp();return}
+let j;if(su){j=await sbReq('/auth/v1/signup','POST',{email:em,password:pw,data:{username:un}});
  if(!j.access_token){authMode='login';authInfo='ثبت‌نام شد ✓ لینک تأیید برای ایمیلت فرستاده شد. بعد از تأیید اینجا وارد شو.';render();return}}
 else j=await sbReq('/auth/v1/token?grant_type=password','POST',{email:em,password:pw});
-setAuth(j);KEY='studyTracker.v1.'+AUTH.user.id;S=load();authKeep={u:'',e:''};render();await cloudPull(true);render()}
+setAuth(j);await enterApp()}
 catch(e){authErr=authMsg(String(e.message||e));render()}}
+async function handleHash(){const h=location.hash;if(!h.includes('access_token='))return;const q=new URLSearchParams(h.slice(1));history.replaceState(null,'',location.pathname+location.search);
+try{const tok=q.get('access_token'),u=await sbReq('/auth/v1/user','GET',null,tok),sess={access_token:tok,refresh_token:q.get('refresh_token'),expires_in:+q.get('expires_in')||3600,user:u};
+if(q.get('type')==='recovery'){PEND=sess;AUTH=null;authMode='newpass';render()}else{setAuth(sess);await enterApp()}}
+catch(e){authErr='لینک منقضی شده یا نامعتبره؛ دوباره امتحان کن.';render()}}
 const dirtyK=()=>'st.dirty.'+AUTH.user.id;
 function cloudQueue(){if(!AUTH)return;cver++;try{localStorage.setItem(dirtyK(),'1')}catch(e){}clearTimeout(cqT);cqT=setTimeout(cloudPush,2500)}
 async function cloudPush(){if(!AUTH||cpBusy)return;cpBusy=true;const v=cver;syncState='…';updSync();
@@ -885,10 +905,93 @@ return`<section class="card"><h2>👤 حساب کاربری</h2><div><b>${esc(u.
 <div class="row fit"><button class="btn ghost" onclick="cloudPush()">🔄 همگام‌سازی الان</button><button class="btn red" onclick="logout()">خروج</button></div></section>`}
 async function logout(){if(!confirm('از حساب خارج بشی؟'))return;if(localStorage.getItem(dirtyK()))await cloudPush();localStorage.removeItem('st.auth');AUTH=null;KEY='studyTracker.v1.guest';S=defaultState();view='today';render()}
 
+/* ======================= بیشتر / سرفصل‌ها / گزارش هفتگی / PWA ======================= */
+const MORE=['routine','mistakes','syllabus','acts','attend','notes','league','history','settings'];
+function viewMore(){const it=[['routine','🔄','روتین','#16a34a'],['mistakes','🎯','نقاط ضعف','#e11d48'],['syllabus','📖','سرفصل‌ها','#2563eb'],['acts','⏱','تایمر فعالیت‌ها','#06b6d4'],['attend','⏰','حضور و غیاب','#f97316'],['notes','📓','دفترچه','#eab308'],['league','🏆','رقابت','#7c3aed'],['history','🗂','تاریخچه','#ec4899'],['settings','⚙️','تنظیمات','#64748b']],n=dueMistakes().length;
+return`<section class="card"><h2>بیشتر</h2><div class="moreg">${it.map(([v,i,t,c])=>`<button class="morebtn" style="background:linear-gradient(135deg,${c}38,${c}10);border-color:${c}66" onclick="setView('${v}')"><span>${i}</span>${t}${v==='mistakes'&&n?` <span class="tag">${n}</span>`:''}</button>`).join('')}</div></section>`}
+function planAdd(sub,topic,note){S.plan.push({id:uid(),ts:Date.now(),date:todayKey(),done:false,subject:sub,topic,min:0,tests:0,note:note||''})}
+function mkPlan(id){const m=S.mistakes.find(x=>x.id===id);if(!m)return;planAdd(m.subject,m.topic||'','مرور نقطه‌ضعف');save();toast('به برنامه‌ی امروز اضافه شد ✓');render()}
+function mkDueToPlan(){const tk=todayKey();let n=0;dueMistakes().forEach(m=>{if(!S.plan.some(t=>t.date===tk&&t.subject===m.subject&&t.topic===(m.topic||'')&&t.note==='مرور نقطه‌ضعف')){planAdd(m.subject,m.topic||'','مرور نقطه‌ضعف');n++}});save();toast(n?fa(n)+' مرور به برنامه اضافه شد ✓':'قبلاً اضافه شده');render()}
+const SYL=['شروع نکردم','خوندم','تست زدم','مسلطم'];let sylOpen={};
+function sylAdd(i){const sub=mkSubs()[i],ta=$('sy_'+i);if(!ta)return;const L=S.syllabus[sub]=S.syllabus[sub]||[];ta.value.split('\n').map(x=>x.trim()).filter(Boolean).forEach(n=>{if(!L.some(t=>t.name===n))L.push({id:uid(),name:n,st:0})});sylOpen[i]=true;save();render()}
+function sylSt(sub,id){const t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(t){t.st=((t.st||0)+1)%4;save();render()}}
+function sylDel(sub,id){if(confirm('این مبحث حذف بشه؟')){S.syllabus[sub]=S.syllabus[sub].filter(x=>x.id!==id);save();render()}}
+function sylWeak(sub,id){const t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(!t)return;mkForm={subject:sub,topic:t.name,note:''};mkEditId=null;setView('mistakes')}
+function sylPlan(sub,id){const t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(!t)return;planAdd(sub,t.name,'');save();toast('به برنامه‌ی امروز اضافه شد ✓')}
+function viewSyllabus(){const subs=mkSubs();let all=0,sum=0;
+const box=subs.map((sub,i)=>{const L=S.syllabus[sub]||[],p=L.length?L.reduce((a,t)=>a+(t.st||0),0)/(3*L.length)*100:0;all+=L.length;sum+=L.reduce((a,t)=>a+(t.st||0),0);
+return`<details class="card" ${sylOpen[i]?'open':''} ontoggle="sylOpen[${i}]=this.open"><summary style="cursor:pointer;font-weight:800"><i class="dot" style="background:${subjColor(sub)}"></i>${esc(sub)} <span class="muted small">· ${fa(L.filter(t=>t.st===3).length)} از ${fa(L.length)} مسلط · ${Math.round(p)}%</span></summary>
+<div class="prog" style="margin:8px 0"><i style="width:${p}%;background:${subjColor(sub)}"></i></div>
+${L.map(t=>`<div class="syt"><div class="n">${esc(t.name)}</div><button class="sst s${t.st||0}" onclick="sylSt('${esc(sub)}','${t.id}')">${SYL[t.st||0]}</button><button class="btn ghost sm" title="نقطه‌ضعف" onclick="sylWeak('${esc(sub)}','${t.id}')">🎯</button><button class="btn ghost sm" title="به برنامه‌ی امروز" onclick="sylPlan('${esc(sub)}','${t.id}')">📅</button><button class="btn ghost sm" onclick="sylDel('${esc(sub)}','${t.id}')">🗑</button></div>`).join('')}
+<textarea id="sy_${i}" placeholder="مبحث‌ها رو بنویس، هر مبحث توی یه خط"></textarea><div class="row fit" style="margin-top:8px"><button class="btn sm" onclick="sylAdd(${i})">افزودن</button></div></details>`}).join('');
+return`<section class="card"><h2>📖 سرفصل‌ها</h2><div class="muted small">مبحث‌های هر درس رو اضافه کن و وضعیتش رو با زدن روی دکمه‌ی وضعیت عوض کن (شروع نکردم ← خوندم ← تست زدم ← مسلطم).${all?` پیشرفت کل: <b>${Math.round(sum/(3*all)*100)}%</b>`:''}</div></section>${box}`}
+function weeklyCard(){const tk=todayKey(),ws=addDays(tk,-wdIdx(tk)),days=[...Array(7)].map((_,i)=>addDays(ws,i)),pw=[...Array(7)].map((_,i)=>addDays(ws,i-7));
+const sec=ds=>ds.map(d=>S.sessions.filter(s=>s.date===d).reduce((a,s)=>a+(s.sec||0),0)),per=sec(days),tot=per.reduce((a,b)=>a+b,0),ptot=sec(pw).reduce((a,b)=>a+b,0);
+const pl=S.plan.filter(t=>days.includes(t.date)),dn=pl.filter(t=>t.done).length,mx=Math.max(...per),bi=per.indexOf(mx),tests=S.sessions.filter(s=>days.includes(s.date)).reduce((a,s)=>a+(s.tests||0),0);
+let rs=0,rd=0;S.routine.items.forEach(r=>days.forEach((d,i)=>{if(d<=tk&&rtDays(r).includes(i)){rs++;if(rtDone(d,r.id))rd++}}));
+const dl=ptot?Math.round((tot-ptot)/ptot*100):null;
+return`<section class="card"><h2>📝 گزارش هفتگی</h2><div class="grid"><div class="kpi"><b>${dur(tot)}</b><span>مطالعه‌ی این هفته${dl==null?'':` (${dl>=0?'+':'−'}${Math.abs(dl)}% نسبت به هفته‌ی قبل)`}</span></div><div class="kpi"><b>${fa(dn)} از ${fa(pl.length)}</b><span>کارهای برنامه انجام‌شده</span></div><div class="kpi"><b>${fa(tests)}</b><span>تست این هفته</span></div>${rs?`<div class="kpi"><b>${Math.round(rd/rs*100)}%</b><span>روتین این هفته</span></div>`:''}</div>
+<div class="wk">${per.map((v,i)=>`<div><i style="height:${mx?v/mx*70:0}px"></i>${RTD[i]}</div>`).join('')}</div>
+<div class="muted small">${mx?`بهترین روز: <b>${WEEKDAYS[bi]}</b> (${dur(mx)})`:'هنوز مطالعه‌ای ثبت نشده.'} · ${fa(per.filter(v=>v>0).length)} روز مطالعه</div></section>`}
+const _va=viewAnalysis;viewAnalysis=function(){return _va()+weeklyCard()};
+try{const mf={name:'ثبت و تحلیل مطالعه',short_name:'مطالعه',start_url:location.pathname,display:'standalone',background_color:'#f3f4f9',theme_color:'#4f46e5',dir:'rtl',lang:'fa',icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#4f46e5"/><text x="50" y="68" font-size="56" text-anchor="middle">📚</text></svg>'),sizes:'any',type:'image/svg+xml'}]};
+const lk=document.createElement('link');lk.rel='manifest';lk.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}));document.head.appendChild(lk);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
+
+/* ======================= XP / هدف / حضور و غیاب / تایمر فعالیت / دفترچه / ظاهر ======================= */
+function xpTotal(){let x=0;S.sessions.forEach(q=>{x+=(q.sec||0)/360+(q.tests||0)*0.5});x+=S.plan.filter(t=>t.done).length*5;Object.values(S.routine.log).forEach(a=>x+=a.length*3);Object.values(S.attend.log).forEach(l=>{if(l.wake)x+=5;if(l.report)x+=5});return Math.floor(x)}
+const cumXP=L=>30*L*(L-1);
+function lvl(x){let L=1;while(cumXP(L+1)<=x)L++;return L}
+function streak(){const by=new Set(S.sessions.filter(q=>(q.sec||0)>0||(q.tests||0)>0).map(q=>q.date));let k=todayKey(),n=0;if(!by.has(k))k=addDays(k,-1);while(by.has(k)){n++;k=addDays(k,-1)}return n}
+function gameCard(){const x=xpTotal(),L=lvl(x),a=cumXP(L),b=cumXP(L+1),tk=todayKey(),sec=S.sessions.filter(q=>q.date===tk).reduce((p,q)=>p+(q.sec||0),0),g=(S.settings.dailyGoalMin||0)*60,p=g?Math.min(100,sec/g*100):0,C=2*Math.PI*18;
+return`<section class="card slim"><div style="display:flex;align-items:center;gap:10px"><svg width="46" height="46" viewBox="0 0 46 46" style="flex:0 0 auto"><circle cx="23" cy="23" r="18" fill="none" stroke-width="5" style="stroke:var(--line)"/><circle cx="23" cy="23" r="18" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-p/100)}" transform="rotate(-90 23 23)" style="stroke:var(--accent)"/><text x="23" y="27" text-anchor="middle" font-size="11" font-weight="800" style="fill:var(--text)">${Math.round(p)}%</text></svg>
+<div style="flex:1;min-width:0"><div class="small" style="display:flex;justify-content:space-between;gap:6px;white-space:nowrap"><b>Level ${L}</b><span class="muted">${x-a}/${b-a} XP</span><span>🔥 ${streak()}</span><span class="muted">${g?dur(sec)+' / '+dur(g):'بدون هدف'}</span></div><div class="prog" style="margin:5px 0 0;height:6px"><i style="width:${(x-a)/(b-a)*100}%"></i></div></div></div></section>`}
+const nowHM=()=>{const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())};
+function attMark(k){const tk=todayKey(),l=S.attend.log[tk]=S.attend.log[tk]||{};if(l[k])return;l[k]=nowHM();save();toast('ثبت شد ✓');render()}
+function attUndo(k){const l=S.attend.log[todayKey()];if(l){delete l[k];save();render()}}
+function setAtt(k,v){S.attend[k]=v;save()}
+function attStreak(){const l=d=>S.attend.log[d]||{};let n=0,k=todayKey();if(!l(k).wake)k=addDays(k,-1);while(l(k).wake&&l(k).wake<=S.attend.wakeBy){n++;k=addDays(k,-1)}return n}
+function attendCard(){const A=S.attend,l=A.log[todayKey()]||{};
+const c=(k,lab,by)=>`<div class="kpi"><span>${lab} (مهلت ${by})</span>${l[k]?`<b class="${l[k]<=by?'good':'bad'}">${l[k]}</b><a href="#" class="small" onclick="attUndo('${k}');return false">برگردون</a>`:`<button class="btn sm" onclick="attMark('${k}')">ثبت</button>`}</div>`;
+return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">⏰ حضور و غیاب</h2><button class="btn ghost sm" style="flex:0 0 auto" onclick="setView('attend')">جدول هفته</button></div><div class="grid">${c('wake','بیداری',A.wakeBy)}${c('report','تأیید گزارش کار',A.reportBy)}</div></section>`}
+function viewAttend(){const A=S.attend,tk=todayKey(),ws=addDays(tk,-wdIdx(tk));
+const rows=[...Array(7)].map((_,i)=>{const d=addDays(ws,i),l=A.log[d]||{},c=(t,by)=>t?`<b class="${t<=by?'good':'bad'}">${t}</b>`:'<span class="muted">—</span>';return`<tr><td>${WEEKDAYS[i]} <span class="muted small">${toJ(d).jm}/${toJ(d).jd}</span></td><td>${c(l.wake,A.wakeBy)}</td><td>${c(l.report,A.reportBy)}</td></tr>`}).join('');
+return`<section class="card"><h2>⏰ حضور و غیاب</h2><div class="muted small">هر روز تا مهلت، «بیداری» و «تأیید گزارش کار» رو از صفحه‌ی امروز ثبت کن. سبز یعنی به‌موقع و قرمز یعنی دیر.</div><div class="row"><div><label class="f">مهلت بیداری</label><input type="time" dir="ltr" value="${A.wakeBy}" onchange="setAtt('wakeBy',this.value||'08:00')"></div><div><label class="f">مهلت تأیید گزارش</label><input type="time" dir="ltr" value="${A.reportBy}" onchange="setAtt('reportBy',this.value||'23:59')"></div></div><div style="margin-top:8px">🔥 <b>${attStreak()}</b> روز پیاپی بیداری به‌موقع</div></section>
+<section class="card"><h2>این هفته</h2><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;text-align:center"><tr class="muted small"><td></td><td>بیداری</td><td>گزارش</td></tr>${rows}</table></div></section>`}
+let actFilter='all';
+const actNow=()=>Math.floor(Date.now()/1000),actClk=t=>pad(Math.floor(t/3600))+':'+pad(Math.floor(t/60)%60)+':'+pad(t%60);
+function vib(){try{if(S.settings.ui.vib&&navigator.vibrate)navigator.vibrate(40)}catch(e){}}
+const actToday=id=>S.actLog.filter(x=>x.act===id&&x.date===todayKey()).reduce((p,x)=>p+x.sec,0);
+function actAdd(n,kind,sub){n=(n||val('ac_n')).trim();kind=kind||val('ac_k');sub=sub||val('ac_s');if(!n){toast('اسم فعالیت رو بنویس');return}S.acts.push({id:uid(),name:n,kind,subject:kind==='study'?sub:''});save();render()}
+function actDel(id){if(!confirm('این فعالیت حذف بشه؟'))return;if(S.actRun&&S.actRun.id===id)S.actRun=null;S.acts=S.acts.filter(a=>a.id!==id);save();render()}
+function actStop(){const r=S.actRun;if(!r)return;const a=S.acts.find(x=>x.id===r.id),sec=actNow()-r.start,tk=todayKey();S.actRun=null;
+if(a&&sec>=5){S.actLog.push({id:uid(),act:a.id,date:tk,sec});if(a.kind==='study'&&a.subject&&sec>=60)S.sessions.push({id:uid(),source:'timer',ts:Date.now(),date:tk,subject:a.subject,topic:'',sec,tests:0,correct:null,wrong:null,note:a.name})}}
+function actToggle(id){const r=S.actRun;vib();if(r&&r.id===id)actStop();else{if(r)actStop();S.actRun={id,start:actNow()}}save();render()}
+function updActs(){document.querySelectorAll('.actT').forEach(e=>{const id=e.dataset.id;e.textContent=actClk(actToday(id)+(S.actRun&&S.actRun.id===id?actNow()-S.actRun.start:0))})}
+function viewActs(){const subs=mkSubs(),list=S.acts.filter(a=>actFilter==='all'||a.kind===actFilter),tot=S.acts.reduce((p,a)=>p+actToday(a.id),0);
+return`<section class="card"><h2>⏱ تایمر فعالیت‌ها</h2><div class="muted small">برای هر فعالیت یه تایمر بساز و روشنش کن. فعالیت درسی خودکار توی مطالعه ثبت می‌شه.${tot?` مجموع امروز: <b>${dur(tot)}</b>`:''}</div>
+<div class="row"><input id="ac_n" placeholder="اسم فعالیت (مثلاً خواب)"><select id="ac_k"><option value="other">غیردرسی</option><option value="study">درسی</option></select><select id="ac_s">${subs.map(n=>`<option>${esc(n)}</option>`).join('')}</select></div>
+<div class="row fit" style="margin-top:8px"><button class="btn sm" onclick="actAdd()">+ فعالیت جدید</button>${['خواب','استراحت','ورزش'].map(n=>`<button class="btn ghost sm" onclick="actAdd('${n}','other','')">+ ${n}</button>`).join('')}</div></section>
+<section class="card"><div class="chips">${[['all','همه'],['study','درسی'],['other','غیردرسی']].map(([v,l])=>`<button class="${actFilter===v?'on':''}" onclick="actFilter='${v}';render()">${l}</button>`).join('')}</div>
+${list.length?list.map(a=>{const run=S.actRun&&S.actRun.id===a.id;return`<div class="actc"><div class="n"><b>${esc(a.name)}</b> <span class="tag">${a.kind==='study'?esc(a.subject||'درسی'):'غیردرسی'}</span><div class="actT" data-id="${a.id}">${actClk(actToday(a.id)+(run?actNow()-S.actRun.start:0))}</div></div><button class="btn ${run?'red':''} sm" onclick="actToggle('${a.id}')">${run?'⏹ توقف':'▶ شروع'}</button><button class="btn ghost sm" onclick="actDel('${a.id}')">🗑</button></div>`}).join(''):'<div class="empty">هنوز فعالیتی نساختی.</div>'}</section>`}
+function noteAdd(){S.notes.unshift({id:uid(),ts:Date.now(),title:'',body:''});save();render()}
+function noteSet(id,f,v){const n=S.notes.find(x=>x.id===id);if(n){n[f]=v;n.ts=Date.now();save()}}
+function noteDel(id){if(confirm('این ورق حذف بشه؟')){S.notes=S.notes.filter(x=>x.id!==id);save();render()}}
+function viewNotes(){return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">📓 دفترچه‌ی یادداشت</h2><button class="btn sm" style="flex:0 0 auto" onclick="noteAdd()">+ ورق جدید</button></div><div class="muted small">فرمول، نکته‌ی سریع، برنامه‌ی فردا... هر چی خواستی بنویس. خودکار ذخیره می‌شه.</div></section>`+(S.notes.length?S.notes.map(n=>`<div class="paper"><input class="pt" placeholder="عنوان این ورق..." value="${esc(n.title)}" oninput="noteSet('${n.id}','title',this.value)"><textarea placeholder="هر چیزی که می‌خوای یادت بمونه بنویس..." oninput="noteSet('${n.id}','body',this.value)">${esc(n.body)}</textarea><button class="btn ghost sm" onclick="noteDel('${n.id}')">🗑 حذف</button></div>`).join(''):'<div class="empty">هنوز ورقی نداری.</div>')}
+const ACC=['#7c3aed','#e11d48','#f97316','#eab308','#16a34a','#06b6d4','#2563eb'];
+function applyUI(){const u=S.settings.ui||{},r=document.documentElement;r.dataset.theme=u.mode==='light'||u.mode==='dark'?u.mode:'';
+if(u.accent){r.style.setProperty('--accent',u.accent);r.style.setProperty('--accent-soft','color-mix(in srgb,'+u.accent+' 18%,transparent)')}else{r.style.removeProperty('--accent');r.style.removeProperty('--accent-soft')}
+r.classList.toggle('noanim',!!u.noAnim)}
+function uiSet(k,v){S.settings.ui[k]=v;save();render()}
+function themeCard(){const u=S.settings.ui;return`<section class="card"><h2>🎨 ظاهر</h2><label class="f">حالت</label><div class="chips">${[['auto','خودکار'],['light','روشن'],['dark','تیره']].map(([v,l])=>`<button class="${u.mode===v?'on':''}" onclick="uiSet('mode','${v}')">${l}</button>`).join('')}</div>
+<label class="f">رنگ تم</label><div class="row fit" style="gap:8px;align-items:center">${ACC.map(c=>`<button onclick="uiSet('accent','${c}')" style="width:34px;height:34px;border-radius:50%;border:${u.accent===c?'3px solid var(--text)':'2px solid var(--line)'};background:${c};cursor:pointer;padding:0"></button>`).join('')}<input type="color" value="${u.accent||'#4f6bed'}" onchange="uiSet('accent',this.value)" style="width:40px;height:34px;padding:0"><button class="btn ghost sm" onclick="uiSet('accent','')">پیش‌فرض</button></div>
+<label class="f" style="display:flex;gap:8px"><input type="checkbox" ${u.noAnim?'checked':''} onchange="uiSet('noAnim',this.checked)" style="width:auto"> خاموش کردن انیمیشن‌ها</label>
+<label class="f" style="display:flex;gap:8px"><input type="checkbox" ${u.vib?'checked':''} onchange="uiSet('vib',this.checked)" style="width:auto"> لرزش موقع شروع و پایان تایمر فعالیت‌ها (موبایل)</label></section>`}
+
 function forgotBanner(){const t=S.timer;if(t.status==='idle')return'';const ms=elapsedMs();if(ms<5*3600e3)return'';
 return`<div class="banner" style="background:#fde8e8;color:#b42318"><span>⚠️ تایمر مطالعه ${clock(ms)} روشنه. اگه یادت رفته خاموشش کنی، «پایان و اصلاح» رو بزن و مدت واقعی رو درست کن.</span><button class="btn sm red" onclick="timerStop()">پایان و اصلاح</button></div>`}
 
-render();if(AUTH)cloudPull().then(()=>render()).catch(()=>{});
+render();if(AUTH)cloudPull().then(()=>render()).catch(()=>{});handleHash();
 
 /* ======================= رقابت گروهی (Supabase) ======================= */
 const LG_SQL=`create table if not exists public.study_stats (
