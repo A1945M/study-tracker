@@ -183,6 +183,22 @@ main{padding-bottom:88px}
 #hdrClock{margin-top:-6px;margin-bottom:-6px}#hdrClock .wsvg{width:64px;height:64px;filter:none}
 .card.slim{padding:8px 12px}
 .card.cd{padding:8px 14px!important;align-items:center}.card.cd b{font-size:24px!important;line-height:1.2;color:var(--accent)}
+.rmbar{position:sticky;top:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.qr{display:flex;align-items:center;gap:6px;padding:5px 0;border-top:1px solid var(--line)}.qn{width:30px;font-weight:700;color:var(--muted);direction:ltr;text-align:center}
+.qo{flex:1;font:inherit;padding:9px 0;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);cursor:pointer}.qo.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.qf{font:inherit;width:34px;padding:7px 0;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--muted);cursor:pointer}.qf.on{color:#f59e0b;border-color:#f59e0b}
+.rmwarn{color:var(--bad)}
+.qr.sep{border-top:1px dashed var(--muted)}
+.sheet{background:#fff;color:#111;width:760px;padding:14px;direction:rtl;font-family:inherit;box-sizing:border-box}
+.sh-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:10px;font-size:13px}
+.sh-g{display:grid;grid-template-columns:repeat(3,1fr) 220px;gap:10px;align-items:start}
+.sh-s{grid-column:4;grid-row:1/span var(--rows);display:flex;flex-direction:column;gap:8px}
+.scol{border:1.5px solid #111;border-radius:8px;padding:6px 8px}.sct{font-weight:800;border-bottom:1.5px solid #111;margin-bottom:4px;font-size:13px}.sct small{font-weight:400}
+.sr{display:flex;align-items:center;gap:8px;padding:2px 0}.sr b{width:24px;font-size:12px;text-align:center}.sr.sep{border-top:1px dashed #888}.sr.del b{text-decoration:line-through;color:#999}
+.sb{display:inline-flex;width:21px;height:21px;border-radius:50%;border:1.5px solid #222;align-items:center;justify-content:center;font-size:11px;font-style:normal;margin:0 2px;color:#222;box-sizing:border-box}
+.sb.pick{background:#444;color:#fff}.sb.ok{background:#16a34a;color:#fff;border-color:#16a34a}.sb.bad{background:#dc2626;color:#fff;border-color:#dc2626}.sb.key{border:2.5px solid #16a34a;color:#16a34a;font-weight:800}
+.sbox{border:1.5px solid #111;border-radius:8px;padding:6px 8px;font-size:12px}.sbox.dash{border-style:dashed;line-height:1.9}.sl{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #ddd}
+@media print{body *{visibility:hidden}#sheet,#sheet *{visibility:visible}#sheet{position:absolute;top:0;right:0;zoom:1!important}}
 </style>
 </head>
 <body>
@@ -250,6 +266,7 @@ let KEY='studyTracker.v1';
 const SB_URL='https://hjkegmrskwcwefjahoho.supabase.co',SB_KEY='sb_publishable_P0c_Q6VzGaUugsue7-1EOA_M5DWplaz';
 let AUTH=null;try{AUTH=JSON.parse(localStorage.getItem('st.auth')||'null')}catch(e){}
 if(AUTH&&AUTH.user)KEY='studyTracker.v1.'+AUTH.user.id;else AUTH=null;
+let GUEST=!AUTH&&localStorage.getItem('st.guest')==='1';if(GUEST)KEY='studyTracker.v1.guest';
 const COLORS=['#3b82f6','#f59e0b','#10b981','#ec4899','#8b5cf6','#14b8a6','#ef4444','#94a3b8','#f97316','#06b6d4','#84cc16','#a855f7'];
 const DEFAULT_SUBJECTS=['ریاضی','فیزیک','شیمی','ادبیات','عربی','دین و زندگی','زبان انگلیسی','سایر'];
 const PRESET={
@@ -260,12 +277,12 @@ const PRESET={
 'عربی':['ترجمه','قواعد','تحلیل صرفی','درک مطلب'],
 'دین و زندگی':['مفاهیم','ترجمه آیات','قرابت معنایی'],
 'زبان انگلیسی':['گرامر','لغت','کلوز تست','درک مطلب']};
-function defaultState(){return{v:1,sessions:[],days:{},settings:{dailyGoalMin:480,subjects:DEFAULT_SUBJECTS.map((n,i)=>({name:n,color:COLORS[i],goalH:0})),lastBackup:null,ui:{accent:"",mode:"auto",noAnim:false,vib:true},examCoef:{'ریاضی':4,'فیزیک':4,'شیمی':3},examSubjects:['ریاضی','فیزیک','شیمی'],alert:{every:0,sound:true,notify:true},konkurDate:''},timer:{status:'idle',startedAt:0,accumMs:0,subject:'',topic:'',note:'',dayKey:'',lastBlock:0},exams:[],mistakes:[],plan:[],routine:{items:[],log:{}},syllabus:{},acts:[],actRun:null,actLog:[],notes:[],attend:{wakeBy:"08:00",reportBy:"23:59",log:{}},examDraft:null,examTimers:{exam:{status:'idle',startedAt:0,accumMs:0,alertMin:0,alerted:false},analysis:{status:'idle',startedAt:0,accumMs:0,target:'draft',alertMin:0,alerted:false}}}}
+function defaultState(){return{v:1,sessions:[],days:{},settings:{dailyGoalMin:480,subjects:DEFAULT_SUBJECTS.map((n,i)=>({name:n,color:COLORS[i],goalH:0})),lastBackup:null,ui:{accent:"",mode:"auto",noAnim:false,vib:true},examCoef:{'ریاضی':4,'فیزیک':4,'شیمی':3},examSubjects:['ریاضی','فیزیک','شیمی'],alert:{every:0,sound:true,notify:true},konkurDate:''},timer:{status:'idle',startedAt:0,accumMs:0,subject:'',topic:'',note:'',dayKey:'',lastBlock:0},exams:[],mistakes:[],plan:[],routine:{items:[],log:{}},syllabus:{},room:null,pending:[],acts:[],actRun:null,actLog:[],notes:[],attend:{wakeBy:"08:00",reportBy:"23:59",log:{}},examDraft:null,examTimers:{exam:{status:'idle',startedAt:0,accumMs:0,alertMin:0,alerted:false},analysis:{status:'idle',startedAt:0,accumMs:0,target:'draft',alertMin:0,alerted:false}}}}
 function merge(o){const d=defaultState();const r=Object.assign(d,o,{settings:Object.assign(d.settings,o.settings||{}),timer:Object.assign(d.timer,o.timer||{})});
 r.settings.alert=Object.assign({every:0,sound:true,notify:true},r.settings.alert||{});r.settings.examCoef=r.settings.examCoef||{};
 if(!Array.isArray(r.settings.examSubjects)||!r.settings.examSubjects.length)r.settings.examSubjects=['ریاضی','فیزیک','شیمی'];
 const dt=defaultState().examTimers;['exam','analysis'].forEach(k=>r.examTimers[k]=Object.assign({},dt[k],(o&&o.examTimers&&o.examTimers[k])||{}));
-['sessions','exams','mistakes','plan'].forEach(k=>{if(!Array.isArray(r[k]))r[k]=[]});if(!r.routine||!Array.isArray(r.routine.items))r.routine={items:[],log:{}};r.routine.log=r.routine.log||{};if(!r.syllabus||typeof r.syllabus!=='object'||Array.isArray(r.syllabus))r.syllabus={};r.settings=r.settings||{};r.settings.ui=Object.assign({accent:'',mode:'auto',noAnim:false,vib:true},r.settings.ui||{});if(!Array.isArray(r.acts))r.acts=[];if(!Array.isArray(r.actLog))r.actLog=[];if(!Array.isArray(r.notes))r.notes=[];if(!r.attend||typeof r.attend!=='object')r.attend={};r.attend=Object.assign({wakeBy:'08:00',reportBy:'23:59'},r.attend);r.attend.log=r.attend.log||{};return r}
+['sessions','exams','mistakes','plan'].forEach(k=>{if(!Array.isArray(r[k]))r[k]=[]});if(!r.routine||!Array.isArray(r.routine.items))r.routine={items:[],log:{}};r.routine.log=r.routine.log||{};if(!r.syllabus||typeof r.syllabus!=='object'||Array.isArray(r.syllabus))r.syllabus={};r.settings=r.settings||{};r.settings.ui=Object.assign({accent:'',mode:'auto',noAnim:false,vib:true},r.settings.ui||{});if(!Array.isArray(r.acts))r.acts=[];if(!Array.isArray(r.actLog))r.actLog=[];if(!Array.isArray(r.notes))r.notes=[];if(!Array.isArray(r.pending))r.pending=[];if(!r.attend||typeof r.attend!=='object')r.attend={};r.attend=Object.assign({wakeBy:'08:00',reportBy:'23:59'},r.attend);r.attend.log=r.attend.log||{};return r}
 function load(){try{const r=localStorage.getItem(KEY);if(r)return merge(JSON.parse(r))}catch(e){}return defaultState()}
 let S=load();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('ذخیره‌سازی ممکن نشد! از داده‌ها پشتیبان بگیر.')}cloudQueue()}
@@ -299,7 +316,7 @@ function timerPause(){const t=S.timer;if(t.status==='running'){t.accumMs=elapsed
 function timerStop(){const t=S.timer;if(t.status==='running'){t.accumMs=elapsedMs();t.status='paused';t.startedAt=0;save()}render();openSession({fromTimer:true})}
 function timerReset(){Object.assign(S.timer,{status:'idle',startedAt:0,accumMs:0,topic:'',note:'',dayKey:'',lastBlock:0});save();document.title='ثبت و تحلیل مطالعه'}
 function timerDiscard(){if(confirm('تایمر فعلی بدون ثبت پاک بشه؟')){timerReset();render()}}
-function tick(){updWall();updActs();const e=$('clock');if(S.timer.status==='running'){if(e)e.textContent=clock(elapsedMs());document.title='⏱ '+clock(elapsedMs());checkAlerts()}
+function tick(){updWall();updActs();updRoom();const e=$('clock');if(S.timer.status==='running'){if(e)e.textContent=clock(elapsedMs());document.title='⏱ '+clock(elapsedMs());checkAlerts()}
 ['exam','analysis'].forEach(k=>{if(S.examTimers&&S.examTimers[k].status==='running'){const c=$('clk_'+k);if(c)c.textContent=clock(exEl(k));if(S.timer.status!=='running')document.title='⏱ '+(k==='exam'?'آزمون ':'تحلیل ')+clock(exEl(k));checkExAlert(k)}});}
 setInterval(tick,1000);
 
@@ -348,9 +365,9 @@ function delSession(id){if(confirm('این جلسه حذف بشه؟')){S.session
 let view='today',aRange='week',topicSort='time',hSub='',hQ='',hLimit=60,showReport=false;
 const app=$('app');
 function setView(v){view=v;render();window.scrollTo(0,0);if(v==='league'&&typeof lgRefresh==='function')lgRefresh(false)}
-function render(){const nv=document.querySelector('header nav');if(!AUTH){nv.style.display='none';$('hdrClock').innerHTML='';$('hdrDate').textContent='';app.innerHTML=authView();return}nv.style.display='';applyUI();$('hdrClock').innerHTML=wallCard();$('hdrDate').textContent=jDate(todayKey());document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===(MORE.includes(view)?'more':view)));
+function render(){const nv=document.querySelector('header nav');if(!AUTH&&!GUEST){nv.style.display='none';$('hdrClock').innerHTML='';$('hdrDate').textContent='';app.innerHTML=authView();return}nv.style.display='';applyUI();$('hdrClock').innerHTML=wallCard();$('hdrDate').textContent=jDate(todayKey())+(GUEST?' · مهمان':'');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===(MORE.includes(view)?'more':view)));
 syncEx();const V={today:viewToday,plan:viewPlan,analysis:viewAnalysis,exams:viewExams,mistakes:viewMistakes,more:viewMore,acts:viewActs,attend:viewAttend,notes:viewNotes,syllabus:viewSyllabus,routine:viewRoutine,league:viewLeague,history:viewHistory,settings:viewSettings};app.innerHTML=(V[view]||viewToday)();
-if(view==='exams')exCalc();updWall()}
+if(view==='exams'&&$('e_b0'))exCalc();updWall();fitSheet()}
 
 function sessRow(s,showDate){const tx=s.tests?` · ${fa(s.tests)} تست${s.correct!=null||s.wrong!=null?' ('+fa(s.correct||0)+' درست، '+fa(s.wrong||0)+' غلط)':''}`:'';
 return`<div class="sess"><span class="dot" style="background:${subjColor(s.subject)};margin-top:9px"></span><div class="body"><div><b>${esc(s.subject)}</b>${s.topic?' – '+esc(s.topic):''}</div>
@@ -520,7 +537,8 @@ function resetAll(){if(confirm('همه‌ی داده‌ها پاک بشه؟')&&c
 let EX_SUBS=['ریاضی','فیزیک','شیمی'];
 function syncEx(){const l=S.settings.examSubjects;EX_SUBS=(Array.isArray(l)&&l.length?l:['ریاضی','فیزیک','شیمی']).slice()}
 const f2=x=>(Math.round(x*100)/100).toFixed(2);
-const exPct=(t,c,w)=>t>0?((c||0)-(w||0)/3)/t*100:null;
+const negK=()=>(S.settings.examTpl&&S.settings.examTpl.neg===false)?0:1/3;
+const exPct=(t,c,w)=>t>0?((c||0)-(w||0)*negK())/t*100:null;
 function exTotals(e){const co=S.settings.examCoef||{};let T=0,C=0,W=0,ws=0,wsum=0;
 EX_SUBS.forEach(n=>{const x=(e.subs&&e.subs[n])||{},t=x.total||0;if(t>0){T+=t;C+=x.correct||0;W+=x.wrong||0;const k=co[n]||1;ws+=exPct(t,x.correct,x.wrong)*k;wsum+=k}});
 return{T,C,W,pooled:T>0?exPct(T,C,W):null,weighted:wsum>0?ws/wsum:null}}
@@ -635,12 +653,12 @@ ${sumEx||sumAn?`<div class="kpi"><b>${dur(sumEx)}</b><span>مجموع زمان �
 function exList(){const ex=S.exams.slice().sort((a,b)=>b.date.localeCompare(a.date)||(b.ts||0)-(a.ts||0));
 if(!ex.length)return'<div class="empty">هنوز آزمونی ثبت نشده.</div>';
 return ex.map(e=>{const t=exTotals(e);
-return`<div><div class="dayhead" style="margin-top:0"><span>${jDate(e.date)}${e.name?' — '+esc(e.name):''}</span><span class="row fit"><button class="btn ghost sm" onclick="exEdit('${e.id}')">ویرایش</button><button class="btn ghost sm" onclick="exDel('${e.id}')">حذف</button></span></div>
+return`<div><div class="dayhead" style="margin-top:0"><span>${jDate(e.date)}${e.name?' — '+esc(e.name):''}</span><span class="row fit">${e.room?`<button class="btn ghost sm" onclick="roomReport('${e.id}')">📄 ورقه</button>`:''}<button class="btn ghost sm" onclick="exEdit('${e.id}')">ویرایش</button><button class="btn ghost sm" onclick="exDel('${e.id}')">حذف</button></span></div>
 <div class="tblwrap"><table><tr><th>درس</th><th>سوال</th><th>درست</th><th>غلط</th><th>نزده</th><th>درصد</th></tr>
 ${EX_SUBS.map(n=>{const x=(e.subs&&e.subs[n])||{total:0,correct:0,wrong:0};const p=x.total>0?exPct(x.total,x.correct,x.wrong):null;return`<tr><td><i class="dot" style="background:${subjColor(n)}"></i>${n}</td><td>${x.total?fa(x.total):'—'}</td><td>${x.total?fa(x.correct||0):'—'}</td><td>${x.total?fa(x.wrong||0):'—'}</td><td>${x.total?fa(x.total-(x.correct||0)-(x.wrong||0)):'—'}</td><td class="${pctCls(p)}">${pctX(p)}</td></tr>`}).join('')}</table></div>
 <div class="small" style="margin-top:6px">درصد کل: <b class="${pctCls(t.pooled)}">${pctX(t.pooled)}</b> · با ضریب: <b class="${pctCls(t.weighted)}">${pctX(t.weighted)}</b>${e.examSec?' · ⏱ آزمون '+dur(e.examSec):''}${e.analysisSec?' · 🔍 تحلیل '+dur(e.analysisSec):''}</div>${e.note?`<div class="meta small muted" style="margin-top:4px">📝 ${esc(e.note)}</div>`:''}</div>`}).join('<hr class="sep">')}
 
-function viewExams(){return`<div class="two">${exTimerCard('exam','⏱ تایمر آزمون')}${exTimerCard('analysis','🔍 تایمر تحلیل آزمون')}</div>${exForm()}${exAnalysis()}<section class="card"><h2>آزمون‌های ثبت‌شده</h2>${exList()}</section>`}
+function viewExamsOrig(){return`<div class="two">${exTimerCard('exam','⏱ تایمر آزمون')}${exTimerCard('analysis','🔍 تایمر تحلیل آزمون')}</div>${exForm()}${exAnalysis()}<section class="card"><h2>آزمون‌های ثبت‌شده</h2>${exList()}</section>`}
 
 
 /* ======================= هشدار و صدا ======================= */
@@ -860,27 +878,37 @@ return rtToday(false)+form+lst}
 async function sbReq(path,method,body,tok,extra){const h=Object.assign({apikey:SB_KEY,'Content-Type':'application/json'},extra||{});if(tok)h.Authorization='Bearer '+tok;
 const r=await fetch(SB_URL+path,{method,headers:h,body:body?JSON.stringify(body):undefined});const t=await r.text();let j=null;try{j=t?JSON.parse(t):null}catch(e){}
 if(!r.ok)throw new Error((j&&(j.msg||j.error_description||j.message||j.error))||('HTTP '+r.status));return j}
-function setAuth(j){AUTH={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),user:{id:j.user.id,email:j.user.email,username:(j.user.user_metadata||{}).username||''}};localStorage.setItem('st.auth',JSON.stringify(AUTH))}
-async function sbToken(){if(AUTH.expires_at*1000-Date.now()<60000){const j=await sbReq('/auth/v1/token?grant_type=refresh_token','POST',{refresh_token:AUTH.refresh_token});j.user=j.user||{id:AUTH.user.id,email:AUTH.user.email,user_metadata:{username:AUTH.user.username}};setAuth(j)}return AUTH.access_token}
+function setAuth(j){AUTH={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),user:{id:j.user.id,email:j.user.email,username:(j.user.user_metadata||{}).username||'',field:(j.user.user_metadata||{}).field||''}};localStorage.setItem('st.auth',JSON.stringify(AUTH))}
+async function sbToken(){if(AUTH.expires_at*1000-Date.now()<60000){const j=await sbReq('/auth/v1/token?grant_type=refresh_token','POST',{refresh_token:AUTH.refresh_token});j.user=j.user||{id:AUTH.user.id,email:AUTH.user.email,user_metadata:{username:AUTH.user.username,field:AUTH.user.field}};setAuth(j)}return AUTH.access_token}
 let authMode='login',authErr='',authInfo='',authKeep={u:'',e:''},cqT=null,cpBusy=false,cver=0,syncState='';
 const authMsg=m=>({'Invalid login credentials':'ایمیل یا رمز عبور اشتباهه.','User already registered':'این ایمیل قبلاً ثبت‌نام کرده.','Email not confirmed':'ایمیلت هنوز تأیید نشده؛ لینک تأیید رو توی ایمیلت باز کن.'}[m]||(/rate limit/i.test(m)?'تعداد تلاش زیاد بود؛ چند دقیقه بعد دوباره امتحان کن.':/Failed to fetch|NetworkError/i.test(m)?'به سرور وصل نشد؛ اینترنت یا فیلترشکن رو چک کن.':m));
-function authView(){const m=authMode,su=m==='signup',fg=m==='forgot',np=m==='newpass';
+let authField='';
+function pickField(f){const g=id=>$(id)?$(id).value:'';authKeep={u:g('au_u')||authKeep.u,e:g('au_e')||authKeep.e};authField=f;render()}
+function fieldChips(){return`<label class="f">رشته‌ات چیه؟</label><div class="chips">${Object.keys(FIELDS).map(f=>`<button type="button" class="${authField===f?'on':''}" onclick="pickField('${f}')">${f}</button>`).join('')}</div>`}
+function guestEnter(){if(!authField){authErr='رشته‌ات رو انتخاب کن.';render();return}localStorage.setItem('st.guest','1');GUEST=true;KEY='studyTracker.v1.guest';S=load();if(!S.settings.field)applyField(authField);authErr='';render()}
+function guestExit(m){localStorage.removeItem('st.guest');GUEST=false;KEY='studyTracker.v1.none';S=defaultState();authMode=m;authErr='';authInfo='';render()}
+function authView(){const m=authMode,su=m==='signup',fg=m==='forgot',np=m==='newpass',gs=m==='guest';
+const err=authErr?`<div class="ins bad" style="margin-top:10px">${esc(authErr)}</div>`:'',inf=authInfo?`<div class="ins good" style="margin-top:10px">${esc(authInfo)}</div>`:'';
+if(gs)return`<section class="card" style="max-width:420px;margin:30px auto"><h2 style="text-align:center">👤 ورود به‌عنوان مهمان</h2>${fieldChips()}<div class="muted small" style="margin-top:10px">بدون ایمیل وارد می‌شی. اطلاعاتت فقط روی همین مرورگر ذخیره می‌شه و بعداً می‌تونی حساب بسازی تا اطلاعاتت منتقل بشه.</div>${err}<div class="row fit" style="margin-top:14px"><button class="btn" onclick="guestEnter()">ورود</button><button class="btn ghost" onclick="authMode='login';authErr='';render()">برگشت</button></div></section>`;
 const ttl=np?'🔑 رمز جدید':fg?'🔑 فراموشی رمز':su?'📚 ساخت حساب جدید':'📚 ورود به حساب';
 return`<section class="card" style="max-width:420px;margin:30px auto"><h2 style="text-align:center">${ttl}</h2><form onsubmit="return authSubmit(event)">
+${su?fieldChips():''}
 ${su?`<label class="f">نام کاربری</label><input id="au_u" autocomplete="username" maxlength="20" value="${esc(authKeep.u)}">`:''}
 ${np?'':`<label class="f">ایمیل</label><input id="au_e" type="email" dir="ltr" autocomplete="email" required value="${esc(authKeep.e)}">`}
 ${fg?'':`<label class="f">${np?'رمز جدید':'رمز عبور'} (حداقل 6 حرف)</label><input id="au_p" type="password" dir="ltr" autocomplete="${m==='login'?'current-password':'new-password'}" required minlength="6">`}
-${authErr?`<div class="ins bad" style="margin-top:10px">${esc(authErr)}</div>`:''}${authInfo?`<div class="ins good" style="margin-top:10px">${esc(authInfo)}</div>`:''}
+${err}${inf}
 <div class="row fit" style="margin-top:14px"><button class="btn">${np?'ذخیره‌ی رمز':fg?'ارسال لینک بازیابی':su?'ثبت‌نام':'ورود'}</button>${np?'':`<button type="button" class="btn ghost" onclick="authMode='${m==='login'?'signup':'login'}';authErr='';authInfo='';render()">${m==='login'?'ساخت حساب جدید':'حساب دارم'}</button>`}</div></form>
-${m==='login'?`<div style="margin-top:12px"><a href="#" onclick="authMode='forgot';authErr='';authInfo='';render();return false">رمزم رو فراموش کردم</a></div>`:''}</section>`}
+${m==='login'?`<div style="margin-top:12px"><a href="#" onclick="authMode='forgot';authErr='';authInfo='';render();return false">رمزم رو فراموش کردم</a></div>`:''}
+${m==='login'||su?`<div style="margin-top:14px;text-align:center"><button class="btn ghost" onclick="authMode='guest';authErr='';authInfo='';render()">ورود به‌عنوان مهمان (بدون ایمیل)</button></div>`:''}</section>`}
 let PEND=null;
-async function enterApp(){KEY='studyTracker.v1.'+AUTH.user.id;S=load();authKeep={u:'',e:''};render();await cloudPull(true);render()}
+async function enterApp(){GUEST=false;localStorage.removeItem('st.guest');KEY='studyTracker.v1.'+AUTH.user.id;S=load();authKeep={u:'',e:''};render();await cloudPull(true);render()}
 async function authSubmit(ev){ev.preventDefault();const m=authMode,su=m==='signup',em=m==='newpass'?'':val('au_e').trim(),pw=m==='forgot'?'':val('au_p'),un=su?val('au_u').trim():'';authKeep={u:un,e:em};authErr='';authInfo='';
 if(su&&(un.length<2||un.length>20)){authErr='نام کاربری ۲ تا ۲۰ حرف باشه.';render();return}
+if(su&&!authField){authErr='رشته‌ات رو انتخاب کن.';render();return}
 ev.target.querySelector('button').disabled=true;
 try{if(m==='forgot'){await sbReq('/auth/v1/recover?redirect_to='+encodeURIComponent(location.origin+location.pathname),'POST',{email:em});authMode='login';authInfo='اگه این ایمیل حساب داشته باشه، لینک بازیابی براش فرستاده شد. ایمیلت (و اسپم) رو چک کن.';render();return}
 if(m==='newpass'){await sbReq('/auth/v1/user','PUT',{password:pw},PEND.access_token);setAuth(PEND);PEND=null;authMode='login';await enterApp();return}
-let j;if(su){j=await sbReq('/auth/v1/signup','POST',{email:em,password:pw,data:{username:un}});
+let j;if(su){j=await sbReq('/auth/v1/signup','POST',{email:em,password:pw,data:{username:un,field:authField}});
  if(!j.access_token){authMode='login';authInfo='ثبت‌نام شد ✓ لینک تأیید برای ایمیلت فرستاده شد. بعد از تأیید اینجا وارد شو.';render();return}}
 else j=await sbReq('/auth/v1/token?grant_type=password','POST',{email:em,password:pw});
 setAuth(j);await enterApp()}
@@ -891,19 +919,24 @@ if(q.get('type')==='recovery'){PEND=sess;AUTH=null;authMode='newpass';render()}e
 catch(e){authErr='لینک منقضی شده یا نامعتبره؛ دوباره امتحان کن.';render()}}
 const dirtyK=()=>'st.dirty.'+AUTH.user.id;
 function cloudQueue(){if(!AUTH)return;cver++;try{localStorage.setItem(dirtyK(),'1')}catch(e){}clearTimeout(cqT);cqT=setTimeout(cloudPush,2500)}
+const rtK=()=>'st.rt.'+AUTH.user.id;
+async function cloudPullForce(){const tok=await sbToken(),rows=await sbReq('/rest/v1/user_data?select=data,updated_at&user_id=eq.'+AUTH.user.id,'GET',null,tok);if(rows&&rows.length){S=merge(rows[0].data||{});localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(rtK(),rows[0].updated_at);localStorage.removeItem(dirtyK());syncState='ok';render()}}
 async function cloudPush(){if(!AUTH||cpBusy)return;cpBusy=true;const v=cver;syncState='…';updSync();
-try{const tok=await sbToken();await sbReq('/rest/v1/user_data?on_conflict=user_id','POST',{user_id:AUTH.user.id,data:S,updated_at:new Date().toISOString()},tok,{Prefer:'resolution=merge-duplicates,return=minimal'});if(v===cver)localStorage.removeItem(dirtyK());syncState='ok'}
+try{const tok=await sbToken(),cur=await sbReq('/rest/v1/user_data?select=updated_at&user_id=eq.'+AUTH.user.id,'GET',null,tok),known=localStorage.getItem(rtK());
+if(cur&&cur.length&&known&&Date.parse(cur[0].updated_at)>Date.parse(known)+2000&&!confirm('اطلاعات این حساب از یه دستگاه دیگه تغییر کرده.\nتأیید = تغییرات همین دستگاه جایگزین بشه\nانصراف = نسخه‌ی سرور دریافت بشه')){await cloudPullForce();cpBusy=false;return}
+const at=new Date().toISOString();await sbReq('/rest/v1/user_data?on_conflict=user_id','POST',{user_id:AUTH.user.id,data:S,updated_at:at},tok,{Prefer:'resolution=merge-duplicates,return=minimal'});localStorage.setItem(rtK(),at);if(v===cver)localStorage.removeItem(dirtyK());syncState='ok'}
 catch(e){syncState='err'}cpBusy=false;updSync()}
-async function cloudPull(first){const tok=await sbToken(),rows=await sbReq('/rest/v1/user_data?select=data&user_id=eq.'+AUTH.user.id,'GET',null,tok);
-if(rows&&rows.length){if(localStorage.getItem(dirtyK())){await cloudPush()}else{S=merge(rows[0].data||{});localStorage.setItem(KEY,JSON.stringify(S));syncState='ok'}}
-else{let adopt=false;try{const old=localStorage.getItem('studyTracker.v1');if(old&&first&&!localStorage.getItem(KEY.replace('.v1.','.v1.x.'))&&confirm('اطلاعات قبلی ذخیره‌شده توی این مرورگر به حساب جدیدت منتقل بشه؟')){S=merge(JSON.parse(old));adopt=true}}catch(e){}
+async function cloudPull(first){const tok=await sbToken(),rows=await sbReq('/rest/v1/user_data?select=data,updated_at&user_id=eq.'+AUTH.user.id,'GET',null,tok);
+if(rows&&rows.length){if(localStorage.getItem(dirtyK())){await cloudPush()}else{localStorage.setItem(rtK(),rows[0].updated_at);S=merge(rows[0].data||{});localStorage.setItem(KEY,JSON.stringify(S));syncState='ok'}}
+else{let adopt=false;try{const old=localStorage.getItem('studyTracker.v1.guest')||localStorage.getItem('studyTracker.v1'),o=old&&JSON.parse(old);if(o&&first&&((o.sessions||[]).length||(o.plan||[]).length||(o.exams||[]).length)&&confirm('اطلاعات قبلی ذخیره‌شده توی این مرورگر به حساب جدیدت منتقل بشه؟')){S=merge(o);adopt=true}}catch(e){}
+if(!adopt&&AUTH.user.field)applyField(AUTH.user.field);
 save();await cloudPush()}updSync()}
 function updSync(){const e=$('syncSt');if(e)e.textContent=syncState==='ok'?'✓ همگام':syncState==='err'?'⚠ خطا در همگام‌سازی (دوباره تلاش می‌شه)':syncState==='…'?'در حال ذخیره…':''}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&AUTH&&localStorage.getItem(dirtyK()))cloudPush()});
-function accountCard(){if(!AUTH)return'';const u=AUTH.user;
+function accountCard(){if(!AUTH)return GUEST?guestCard()+fieldCard():'';const u=AUTH.user;
 return`<section class="card"><h2>👤 حساب کاربری</h2><div><b>${esc(u.username||'—')}</b> <span class="muted small" dir="ltr">${esc(u.email)}</span></div><div class="muted small" id="syncSt" style="margin:4px 0 10px">${syncState==='ok'?'✓ همگام':''}</div>
-<div class="row fit"><button class="btn ghost" onclick="cloudPush()">🔄 همگام‌سازی الان</button><button class="btn red" onclick="logout()">خروج</button></div></section>`}
-async function logout(){if(!confirm('از حساب خارج بشی؟'))return;if(localStorage.getItem(dirtyK()))await cloudPush();localStorage.removeItem('st.auth');AUTH=null;KEY='studyTracker.v1.guest';S=defaultState();view='today';render()}
+<div class="row fit"><button class="btn ghost" onclick="cloudPush()">🔄 همگام‌سازی الان</button><button class="btn ghost" onclick="changePw()">🔑 تغییر رمز</button><button class="btn red" onclick="logout()">خروج</button></div></section>${fieldCard()}`}
+async function logout(){if(!confirm('از حساب خارج بشی؟'))return;if(localStorage.getItem(dirtyK()))await cloudPush();localStorage.removeItem('st.auth');AUTH=null;KEY='studyTracker.v1.none';S=defaultState();view='today';authMode='login';authErr='';authInfo='';render()}
 
 /* ======================= بیشتر / سرفصل‌ها / گزارش هفتگی / PWA ======================= */
 const MORE=['routine','mistakes','syllabus','acts','attend','notes','league','history','settings'];
@@ -952,8 +985,8 @@ function attUndo(k){const l=S.attend.log[todayKey()];if(l){delete l[k];save();re
 function setAtt(k,v){S.attend[k]=v;save()}
 function attStreak(){const l=d=>S.attend.log[d]||{};let n=0,k=todayKey();if(!l(k).wake)k=addDays(k,-1);while(l(k).wake&&l(k).wake<=S.attend.wakeBy){n++;k=addDays(k,-1)}return n}
 function attendCard(){const A=S.attend,l=A.log[todayKey()]||{};
-const c=(k,lab,by)=>`<div class="kpi"><span>${lab} (مهلت ${by})</span>${l[k]?`<b class="${l[k]<=by?'good':'bad'}">${l[k]}</b><a href="#" class="small" onclick="attUndo('${k}');return false">برگردون</a>`:`<button class="btn sm" onclick="attMark('${k}')">ثبت</button>`}</div>`;
-return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">⏰ حضور و غیاب</h2><button class="btn ghost sm" style="flex:0 0 auto" onclick="setView('attend')">جدول هفته</button></div><div class="grid">${c('wake','بیداری',A.wakeBy)}${c('report','تأیید گزارش کار',A.reportBy)}</div></section>`}
+const c=(k,lab,by)=>l[k]?`<span>${lab}: <b class="${l[k]<=by?'good':'bad'}">${l[k]}</b> <a href="#" class="small" onclick="attUndo('${k}');return false">↩</a></span>`:`<button class="btn ghost sm" style="flex:0 0 auto" onclick="attMark('${k}')">${lab} (تا ${by})</button>`;
+return`<section class="card slim"><div class="row" style="justify-content:space-between;align-items:center;flex-wrap:nowrap;gap:6px"><span>⏰</span>${c('wake','بیداری',A.wakeBy)}${c('report','گزارش',A.reportBy)}<a href="#" class="small" onclick="setView('attend');return false">هفته</a></div></section>`}
 function viewAttend(){const A=S.attend,tk=todayKey(),ws=addDays(tk,-wdIdx(tk));
 const rows=[...Array(7)].map((_,i)=>{const d=addDays(ws,i),l=A.log[d]||{},c=(t,by)=>t?`<b class="${t<=by?'good':'bad'}">${t}</b>`:'<span class="muted">—</span>';return`<tr><td>${WEEKDAYS[i]} <span class="muted small">${toJ(d).jm}/${toJ(d).jd}</span></td><td>${c(l.wake,A.wakeBy)}</td><td>${c(l.report,A.reportBy)}</td></tr>`}).join('');
 return`<section class="card"><h2>⏰ حضور و غیاب</h2><div class="muted small">هر روز تا مهلت، «بیداری» و «تأیید گزارش کار» رو از صفحه‌ی امروز ثبت کن. سبز یعنی به‌موقع و قرمز یعنی دیر.</div><div class="row"><div><label class="f">مهلت بیداری</label><input type="time" dir="ltr" value="${A.wakeBy}" onchange="setAtt('wakeBy',this.value||'08:00')"></div><div><label class="f">مهلت تأیید گزارش</label><input type="time" dir="ltr" value="${A.reportBy}" onchange="setAtt('reportBy',this.value||'23:59')"></div></div><div style="margin-top:8px">🔥 <b>${attStreak()}</b> روز پیاپی بیداری به‌موقع</div></section>
@@ -988,6 +1021,112 @@ function themeCard(){const u=S.settings.ui;return`<section class="card"><h2>🎨
 <label class="f" style="display:flex;gap:8px"><input type="checkbox" ${u.noAnim?'checked':''} onchange="uiSet('noAnim',this.checked)" style="width:auto"> خاموش کردن انیمیشن‌ها</label>
 <label class="f" style="display:flex;gap:8px"><input type="checkbox" ${u.vib?'checked':''} onchange="uiSet('vib',this.checked)" style="width:auto"> لرزش موقع شروع و پایان تایمر فعالیت‌ها (موبایل)</label></section>`}
 
+/* ======================= اتاق آزمون ======================= */
+let tplOpen=false;
+const DEF_TPL=()=>({minutes:135,neg:true,sections:[{name:'ریاضی',count:40,coef:4},{name:'فیزیک',count:25,coef:4},{name:'شیمی',count:30,coef:3}]});
+function getTpl(){if(!S.settings.examTpl)S.settings.examTpl=DEF_TPL();return S.settings.examTpl}
+function tplSync(){const t=getTpl();S.settings.examSubjects=t.sections.map(x=>x.name).filter(Boolean);S.settings.examCoef={};t.sections.forEach(x=>{if(x.name)S.settings.examCoef[x.name]=x.coef||1});syncEx();save()}
+const toN=v=>Math.max(0,Math.round(+String(v).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))||0));
+function tplMin(v){getTpl().minutes=toN(v);save()}
+function tplNeg(c){getTpl().neg=c;save()}
+function tplSet(i,k,v){const x=getTpl().sections[i];if(!x)return;x[k]=k==='name'?v:toN(v);tplSync()}
+function tplAdd(){getTpl().sections.push({name:'',count:20,coef:1});tplOpen=true;tplSync();render()}
+function tplDel(i){const t=getTpl();if(t.sections.length<2){toast('حداقل یه درس لازمه');return}t.sections.splice(i,1);tplOpen=true;tplSync();render()}
+function tplPreset(){if(!confirm('قالب به ریاضی (۹۵ سوال، ۱۳۵ دقیقه) برگرده؟'))return;S.settings.examTpl=DEF_TPL();tplOpen=true;tplSync();render()}
+const rmN=R=>R.answers.length;
+function roomStart(){const t=getTpl(),N=t.sections.reduce((a,x)=>a+x.count,0),nm=t.sections.map(x=>(x.name||'').trim());
+if(!N||!t.minutes){toast('تعداد سوال و زمان رو تنظیم کن');return}if(nm.some(x=>!x)||new Set(nm).size!==nm.length){toast('اسم درس‌ها باید پر و غیرتکراری باشه');return}
+if(!confirm('آزمون '+N+' سوالی با '+t.minutes+' دقیقه زمان شروع بشه؟'))return;unlockAudio();
+S.room={tpl:JSON.parse(JSON.stringify(t)),name:roomName.trim(),start:Date.now(),answers:Array(N).fill(0),flags:{},stage:'run'};save();render();window.scrollTo(0,0)}
+function secIdx(t,i){let a=0;for(let k=0;k<t.sections.length;k++){if(i<a+t.sections[k].count)return[k,a];a+=t.sections[k].count}return[0,0]}
+function roomRow(i){const R=S.room,a=R.answers[i],[,st]=secIdx(R.tpl,i),sp=(i-st)%5===0&&i>st?' sep':'';return`<div class="qr${sp}" id="q${i}"><span class="qn">${i+1}</span>${[1,2,3,4].map(o=>`<button class="qo ${a===o?'on':''}" onclick="roomAns(${i},${o})">${o}</button>`).join('')}<button class="qf ${R.flags[i]?'on':''}" onclick="roomFlag(${i})">⚑</button></div>`}
+function roomRefresh(i){const e=$('q'+i);if(e)e.outerHTML=roomRow(i);const c=$('rmCnt');if(c)c.textContent=S.room.answers.filter(x=>x).length;const R=S.room,[si,st]=secIdx(R.tpl,i),ce=$('rc'+si);if(ce)ce.textContent=R.answers.slice(st,st+R.tpl.sections[si].count).filter(x=>x).length}
+function roomAns(i,o){const R=S.room;if(!R||R.stage!=='run')return;R.answers[i]=R.answers[i]===o?0:o;save();roomRefresh(i)}
+function roomFlag(i){const R=S.room;if(!R||R.stage!=='run')return;if(R.flags[i])delete R.flags[i];else R.flags[i]=1;save();roomRefresh(i)}
+function roomLeft(){const R=S.room;return R.tpl.minutes*60-Math.floor((Date.now()-R.start)/1000)}
+function roomFinishAsk(){const R=S.room,b=R.answers.filter(x=>!x).length;if(confirm('آزمون تموم بشه؟'+(b?' '+b+' سوال بی‌پاسخه.':'')))roomFinish(false)}
+function updRoom(){const R=S.room;if(!R||R.stage!=='run')return;const l=roomLeft();if(l<=0){roomFinish(true);return}
+const e=$('roomT');if(e){e.textContent=actClk(l);e.classList.toggle('rmwarn',l<600)}}
+function roomRunView(){const R=S.room,N=rmN(R);let i0=0;
+const secs=R.tpl.sections.map((x,si)=>{const a=i0;i0+=x.count;return`<section class="card" id="rs${si}"><h3 style="margin-top:0">${esc(x.name)} <span class="muted small">(سوال ${a+1} تا ${i0})</span></h3>${Array.from({length:x.count},(_,k)=>roomRow(a+k)).join('')}</section>`}).join('');
+return`<div class="rmbar"><div><div class="muted small">زمان باقی‌مانده</div><div id="roomT" class="actT">${actClk(Math.max(0,roomLeft()))}</div></div><div class="small">پاسخ‌داده: <b id="rmCnt">${R.answers.filter(x=>x).length}</b> از ${N}</div><button class="btn red sm" onclick="roomFinishAsk()">پایان</button></div>
+<div class="chips" style="margin-bottom:8px">${R.tpl.sections.map((x,si)=>{let a=0;for(let k=0;k<si;k++)a+=R.tpl.sections[k].count;return`<button onclick="document.getElementById('rs${si}').scrollIntoView({behavior:'smooth'})">${esc(x.name)} <span id="rc${si}">${R.answers.slice(a,a+x.count).filter(v=>v).length}</span>/${x.count}</button>`}).join('')}</div>${secs}`}
+/* ======================= اتاق آزمون: صفحه‌ها ======================= */
+let roomPage='',roomSel=null,roomName='';
+const pendBy=id=>S.pending.find(x=>x.id===id);
+function roomMigrate(){const R=S.room;if(R&&R.stage==='key'){S.pending.push({id:uid(),name:R.name||'',date:todayKey(),tpl:R.tpl,answers:R.answers,flags:R.flags||{},usedSec:R.usedSec||0,key:Array(R.answers.length).fill(0)});S.room=null;save()}else if(R&&R.stage==='done'){S.room=null;save()}}
+function roomFinish(auto){const R=S.room;if(!R||R.stage!=='run')return;const used=Math.min(R.tpl.minutes*60,Math.floor((Date.now()-R.start)/1000));
+S.pending.push({id:uid(),name:R.name||'',date:todayKey(),tpl:R.tpl,answers:R.answers,flags:R.flags||{},usedSec:used,key:Array(R.answers.length).fill(0)});S.room=null;roomPage='hub';save();vib();render();window.scrollTo(0,0);toast(auto?'زمان آزمون تموم شد ⏰ پاسخ‌هات ذخیره شد':'پاسخ‌هات ذخیره شد ✓ وقتی کلید رسید از «ثبت جواب» واردش کن')}
+function roomKeyOpen(){roomMigrate();const p=S.pending;if(!p.length){toast('آزمونی منتظر ثبت جواب نداری');return}if(p.length===1){roomSel=p[0].id;roomPage='key'}else roomPage='keylist';render();window.scrollTo(0,0)}
+function roomKeyList(){return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">✅ ثبت جواب</h2><button class="btn ghost sm" style="flex:0 0 auto" onclick="roomPage='hub';render()">برگشت</button></div><div class="muted small">کدوم آزمون؟</div>${S.pending.map(P=>`<div class="mst"><b>${esc(P.name||'آزمون')}</b> <span class="muted small">${jDate(P.date,true)} · ${P.answers.filter(x=>x).length} پاسخ · کلید ${P.key.filter(x=>x).length}/${P.answers.length}</span><div class="row fit" style="margin-top:6px"><button class="btn sm" onclick="roomSel='${P.id}';roomPage='key';render()">ثبت جواب</button><button class="btn ghost sm" onclick="roomDiscardP('${P.id}')">حذف</button></div></div>`).join('')}</section>`}
+function roomDiscardP(id){if(!confirm('این آزمون بدون ثبت حذف بشه؟'))return;S.pending=S.pending.filter(x=>x.id!==id);roomPage=S.pending.length?'keylist':'hub';save();render()}
+function keyRow(P,i){const k=P.key[i],a=P.answers[i],[,st]=secIdx(P.tpl,i),sp=(i-st)%5===0&&i>st?' sep':'';
+const m=k>0?(a?(a===k?'<b class="good">✓</b>':'<b class="bad">✗</b>'):'<span class="muted">—</span>'):'';
+return`<div class="qr${sp}" id="k${i}"><span class="qn">${i+1}</span>${[1,2,3,4].map(o=>`<button class="qo ${k===o?'on':''}" onclick="keySet(${i},${o})">${o}</button>`).join('')}<button class="qf ${k===-1?'on':''}" title="حذف‌شده" onclick="keySet(${i},-1)">✕</button><span class="small" style="width:46px;text-align:center">${a?'تو: '+a:'نزده'} ${m}</span></div>`}
+function keyRefresh(i){const P=pendBy(roomSel),e=$('k'+i);if(e)e.outerHTML=keyRow(P,i);const c=$('kcnt');if(c)c.textContent=P.key.filter(x=>x).length}
+function keySet(i,o){const P=pendBy(roomSel);if(!P)return;P.key[i]=P.key[i]===o?0:o;save();keyRefresh(i)}
+function keyPaste(){const P=pendBy(roomSel),raw=String(val('rm_key')).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[^0-4\-]/g,'');
+if(raw.length!==P.answers.length){toast('کلید باید دقیقاً '+P.answers.length+' عدد باشه؛ الان '+raw.length+' تا وارد کردی');return}P.key=[...raw].map(c=>/[1-4]/.test(c)?+c:-1);save();render()}
+function roomKeyView(){const P=pendBy(roomSel),N=P.answers.length;let i0=0;
+const secs=P.tpl.sections.map(x=>{const a=i0;i0+=x.count;return`<section class="card"><h3 style="margin-top:0">${esc(x.name)} <span class="muted small">(سوال ${a+1} تا ${i0})</span></h3>${Array.from({length:x.count},(_,k)=>keyRow(P,a+k)).join('')}</section>`}).join('');
+return`<div class="rmbar"><div><b>${esc(P.name||'آزمون')}</b><div class="small muted">گزینه‌ی درست رو بزن · ثبت‌شده: <b id="kcnt">${P.key.filter(x=>x).length}</b> از ${N}</div></div><button class="btn sm" onclick="roomFinal()">ثبت کلی</button></div>
+<div class="row fit" style="margin-bottom:8px"><button class="btn ghost sm" onclick="roomPage='hub';render()">برگشت</button><button class="btn ghost sm" onclick="roomDiscardP('${P.id}')">حذف آزمون</button></div>
+<details class="card"><summary style="cursor:pointer;font-weight:700">کلید رو یک‌جا بچسبون</summary><div class="muted small">${N} عدد از 1 تا 4 (با فاصله یا بدون فاصله). برای سوال حذف‌شده 0 یا خط تیره.</div><textarea id="rm_key" placeholder="3 1 4 2 ..."></textarea><div class="row fit" style="margin-top:8px"><button class="btn sm" onclick="keyPaste()">اعمال</button></div></details>${secs}`}
+function roomFinal(){const P=pendBy(roomSel);if(!P)return;const un=P.key.filter(x=>!x).length;
+if(un&&!confirm(un+' سوال هنوز کلید نداره و از محاسبه حذف می‌شه. ادامه؟'))return;
+let i0=0;const subs={};
+P.tpl.sections.forEach(x=>{let t=0,c=0,w=0;for(let q=i0;q<i0+x.count;q++){const k=P.key[q];if(k<=0)continue;t++;const a=P.answers[q];if(a===k)c++;else if(a)w++}i0+=x.count;subs[x.name]={total:t,correct:c,wrong:w}});
+const id=uid();S.exams.push({id,ts:Date.now(),date:P.date,name:P.name||('آزمون '+jDate(P.date,true)),subs,examSec:P.usedSec||0,analysisSec:0,analysisLog:[],note:'',room:{answers:P.answers.slice(),key:P.key.slice(),tpl:P.tpl,flags:P.flags}});
+S.pending=S.pending.filter(x=>x.id!==P.id);roomSel=id;roomPage='report';save();render();window.scrollTo(0,0);toast('آزمون ثبت شد ✓')}
+function roomReport(id){roomSel=id;roomPage='report';setView('exams');window.scrollTo(0,0)}
+/* ورقه‌ی نتیجه */
+const pc2=p=>p==null?'—':(Math.round(p*100)/100).toFixed(2)+'%';
+function sheetHTML(e){const R=e.room,T=R.tpl,k=T.sections.length,cols=[],sts=[];let i0=0,TT=0,CC=0,WW=0;
+const bub=(o,a,kk)=>{let c='';if(a===o&&kk>0)c=a===kk?' ok':' bad';else if(a===o)c=' pick';else if(kk===o&&a!==kk)c=' key';return`<i class="sb${c}">${o}</i>`};
+T.sections.forEach(x=>{const a0=i0,sb=e.subs[x.name]||{total:0,correct:0,wrong:0};TT+=sb.total;CC+=sb.correct;WW+=sb.wrong;
+let rows='';for(let q=a0;q<a0+x.count;q++){const kk=R.key[q],a=R.answers[q];rows+=`<div class="sr${(q-a0)%5===0&&q>a0?' sep':''}${kk<0?' del':''}"><b>${q+1}</b><span>${[1,2,3,4].map(o=>bub(o,a,kk)).join('')}</span></div>`}
+i0+=x.count;cols.push(`<div class="scol"><div class="sct">${esc(x.name)} <small>(${a0+1}–${i0})</small></div>${rows}</div>`);
+sts.push(`<div class="sbox"><div class="sct">${esc(x.name)} <small>(${sb.total} سوال)</small></div><div class="sl"><span>پاسخ داده‌شده</span><b>${sb.correct+sb.wrong}</b></div><div class="sl"><span>درست</span><b>${sb.correct}</b></div><div class="sl"><span>غلط</span><b>${sb.wrong}</b></div><div class="sl"><span>درصد</span><b dir="ltr">${pc2(exPct(sb.total,sb.correct,sb.wrong))}</b></div></div>`)});
+const neg=T.neg!==false;
+return`<div id="sheet" class="sheet"><div class="sh-h"><b style="font-size:20px">پاسخ‌برگ آزمون</b><span>نام آزمون: <u>${esc(e.name||'')}</u></span><span>تاریخ: <u>${jDate(e.date)}</u></span><span>زمان: ${T.minutes} دقیقه</span></div>
+<div class="sh-g" style="--rows:${Math.ceil(k/3)}">${cols.join('')}<div class="sh-s">${sts.join('')}<div class="sbox"><div class="sct">جمع کل <small>(${TT} سوال)</small></div><div class="sl"><span>پاسخ داده‌شده</span><b>${CC+WW}</b></div><div class="sl"><span>درست</span><b>${CC}</b></div><div class="sl"><span>غلط</span><b>${WW}</b></div><div class="sl"><span>درصد کل</span><b dir="ltr">${pc2(exPct(TT,CC,WW))}</b></div><div class="sl"><span>زمان مصرف‌شده</span><b>${dur(e.examSec||0)}</b></div></div>
+<div class="sbox dash small">${neg?'درصد با نمره‌ی منفی: (3×C − W) / (3×N) × 100':'درصد: C / N × 100'}<br>C = درست · W = غلط · N = کل سوال‌ها<br><span class="sb ok" style="display:inline-block;width:12px;height:12px"></span> درست <span class="sb bad" style="display:inline-block;width:12px;height:12px"></span> غلط <span class="sb key" style="display:inline-block;width:12px;height:12px"></span> پاسخ صحیح</div></div></div></div>`}
+function roomReportView(){const e=S.exams.find(x=>x.id===roomSel);
+return`<section class="card"><div class="row fit"><button class="btn sm" onclick="sheetImg()">📷 ذخیره به‌صورت تصویر</button><button class="btn ghost sm" onclick="window.print()">🖨 چاپ / PDF</button><button class="btn ghost sm" onclick="roomPage='';render()">بستن</button></div><div class="muted small" style="margin-top:6px">این ورقه توی «آزمون‌های ثبت‌شده» هم هست و بعداً با دکمه‌ی «📄 ورقه» دوباره بازش می‌کنی.</div></section><div id="sheetWrap" style="overflow-x:auto">${sheetHTML(e)}</div>`}
+function fitSheet(){const w=$('sheetWrap'),sh=$('sheet');if(w&&sh)sh.style.zoom=Math.max(0.62,Math.min(1,w.clientWidth/760))}
+function loadScript(u){return new Promise((res,rej)=>{if(window.html2canvas)return res();const el=document.createElement('script');el.src=u;el.onload=res;el.onerror=rej;document.head.appendChild(el)})}
+async function sheetImg(){const el=$('sheet');toast('در حال ساخت تصویر…');try{await loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');const z=el.style.zoom;el.style.zoom=1;const c=await html2canvas(el,{scale:2,backgroundColor:'#ffffff'});el.style.zoom=z;const a=document.createElement('a');a.download='answer-sheet.png';a.href=c.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove()}catch(err){toast('ساخت تصویر ممکن نشد؛ از «چاپ / PDF» استفاده کن')}}
+/* قالب و صفحه‌ی اصلی اتاق */
+function tplCard(){const t=getTpl(),N=t.sections.reduce((a,x)=>a+x.count,0);
+return`<details class="card" ${(tplOpen||!N)?'open':''} ontoggle="tplOpen=this.open"><summary style="cursor:pointer;font-weight:700">⚙️ قالب آزمون (درس‌ها، تعداد سوال و زمان)</summary>
+<div class="row"><div><label class="f">زمان آزمون (دقیقه)</label><input inputmode="numeric" value="${t.minutes||''}" placeholder="مثلاً 135" oninput="tplMin(this.value)"></div></div>
+<label class="f" style="display:flex;gap:8px;align-items:center"><input type="checkbox" ${t.neg?'checked':''} onchange="tplNeg(this.checked)" style="width:auto"> نمره‌ی منفی (هر 3 غلط، 1 درست رو خنثی می‌کنه)</label>
+<div class="muted small" style="margin-top:8px">نام درس · تعداد سوال · ضریب</div>
+${t.sections.map((x,i)=>`<div class="row" style="flex-wrap:nowrap"><input value="${esc(x.name)}" oninput="tplSet(${i},'name',this.value)" placeholder="نام درس"><input inputmode="numeric" value="${x.count||''}" placeholder="سوال" oninput="tplSet(${i},'count',this.value)" style="max-width:76px"><input inputmode="numeric" value="${x.coef||''}" placeholder="ضریب" oninput="tplSet(${i},'coef',this.value)" style="max-width:64px"><button class="btn ghost sm" style="flex:0 0 auto" onclick="tplDel(${i})">🗑</button></div>`).join('')}
+<div class="row fit" style="margin-top:8px"><button class="btn ghost sm" onclick="tplAdd()">+ درس</button><button class="btn ghost sm" onclick="tplPreset()">قالب ریاضی ۹۵ سوالی</button></div>
+<div class="muted small" style="margin-top:6px">ضریب فقط برای «درصد کل با ضریب» استفاده می‌شه. اگه درس‌ها رو عوض کنی، آزمون‌های قبلیِ درس‌های دیگه توی تحلیل حساب نمی‌شن.</div></details>`}
+function roomHubView(){const t=getTpl(),N=t.sections.reduce((a,x)=>a+x.count,0);let i0=0;const rng=t.sections.map(x=>{const a=i0+1;i0+=x.count;return esc(x.name)+' '+a+'–'+i0}).join('، '),pn=S.pending.length;
+return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🏫 اتاق آزمون</h2><button class="btn ghost sm" style="flex:0 0 auto" onclick="roomPage='';render()">برگشت</button></div>
+<div class="muted small" style="margin:6px 0">${N&&t.minutes?N+' سوال · '+t.minutes+' دقیقه · '+rng:'اول پایین، زمان و تعداد سوال هر درس رو تنظیم کن.'}</div>
+<input placeholder="اسم آزمون (اختیاری)" value="${esc(roomName)}" oninput="roomName=this.value">
+<div class="row" style="margin-top:12px;flex-wrap:nowrap"><button class="btn" style="flex:1;padding:18px 8px" onclick="roomStart()">▶ شروع آزمون</button><button class="btn ghost" style="flex:1;padding:18px 8px" onclick="roomKeyOpen()">✅ ثبت جواب${pn?' ('+pn+')':''}</button></div>
+<div class="muted small" style="margin-top:8px">بعد از آزمون پاسخ‌هات ذخیره می‌شن. وقتی کلید رسید، «ثبت جواب» رو بزن، گزینه‌ی درست هر سوال رو انتخاب کن و آخرش «ثبت کلی» رو بزن تا ورقه‌ی نتیجه ساخته و ذخیره بشه.</div></section>${tplCard()}`}
+function viewExams(){roomMigrate();const R=S.room;if(R&&R.stage==='run')return roomRunView();
+if(roomPage==='hub')return roomHubView();if(roomPage==='keylist'&&S.pending.length)return roomKeyList();if(roomPage==='key'&&pendBy(roomSel))return roomKeyView();
+if(roomPage==='report'&&S.exams.some(x=>x.id===roomSel&&x.room))return roomReportView();roomPage='';
+return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🏫 اتاق آزمون</h2><button class="btn" style="flex:0 0 auto" onclick="roomPage='hub';render()">ورود${S.pending.length?' ('+S.pending.length+' منتظر کلید)':''}</button></div><div class="muted small" style="margin-top:6px">آزمون بده، جواب‌ها رو بعداً ثبت کن و ورقه‌ی نتیجه بگیر.</div></section>`+exAnalysis()+`<section class="card"><h2>آزمون‌های ثبت‌شده</h2>${exList()}</section><details class="card"><summary style="cursor:pointer;font-weight:700">ثبت دستی آزمون و تایمرها (بدون اتاق آزمون)</summary><div class="two">${exTimerCard('exam','⏱ تایمر آزمون')}${exTimerCard('analysis','🔍 تایمر تحلیل آزمون')}</div>${exForm()}</details>`}
+
+/* ======================= رشته‌ها و حالت مهمان ======================= */
+const FIELDS={
+'تجربی':{study:['زیست‌شناسی','ریاضی','فیزیک','شیمی'],exam:{minutes:180,neg:true,sections:[{name:'زیست‌شناسی',count:50,coef:1},{name:'ریاضی',count:30,coef:1},{name:'فیزیک',count:30,coef:1},{name:'شیمی',count:45,coef:1}]}},
+'ریاضی':{study:['ریاضی','فیزیک','شیمی'],exam:{minutes:145,neg:true,sections:[{name:'ریاضی',count:40,coef:4},{name:'فیزیک',count:35,coef:4},{name:'شیمی',count:30,coef:3}]}},
+'انسانی':{study:['ادبیات','عربی','ریاضی و آمار','اقتصاد','تاریخ و جغرافیا','جامعه‌شناسی و فلسفه'],exam:{minutes:160,neg:true,sections:[{name:'ادبیات',count:40,coef:1},{name:'عربی',count:25,coef:1},{name:'ریاضی و آمار',count:25,coef:1},{name:'اقتصاد',count:20,coef:1},{name:'تاریخ و جغرافیا',count:25,coef:1},{name:'جامعه‌شناسی و فلسفه',count:25,coef:1}]}}};
+function applyField(f){const F=FIELDS[f];if(!F)return;S.settings.field=f;S.settings.subjects=F.study.map((n,i)=>({name:n,color:COLORS[i%COLORS.length],goalH:0}));const t=JSON.parse(JSON.stringify(F.exam));t.minutes=0;t.sections.forEach(x=>{x.count=0;x.coef=1});S.settings.examTpl=t;tplOpen=true;tplSync()}
+function changeField(f){if(S.settings.field===f)return;if(!confirm('درس‌ها و قالب آزمون به «'+f+'» تغییر کنن؟ جلسه‌های قبلیِ درس‌هایی که توی رشته‌ی جدید نیستن ممکنه توی تحلیل دیده نشن.'))return;applyField(f);render()}
+function fieldCard(){const f=S.settings.field||'';return`<section class="card"><h2>🎓 رشته</h2><div class="chips">${Object.keys(FIELDS).map(x=>`<button class="${f===x?'on':''}" onclick="changeField('${x}')">${x}</button>`).join('')}</div><div class="muted small">با انتخاب رشته، درس‌ها مثل همون رشته می‌شن. تعداد سوال و زمان آزمون رو خودت توی «اتاق آزمون» تنظیم می‌کنی.</div></section>`}
+function guestCard(){return`<section class="card"><h2>👤 حالت مهمان</h2><div class="muted small">اطلاعاتت فقط روی همین مرورگر ذخیره می‌شه و با پاک شدن اطلاعات مرورگر از بین می‌ره. برای همگام‌سازی بین دستگاه‌ها حساب بساز؛ اطلاعات فعلی‌ت منتقل می‌شه.</div><div class="row fit" style="margin-top:8px"><button class="btn" onclick="guestExit('signup')">ساخت حساب</button><button class="btn ghost" onclick="guestExit('login')">ورود به حساب</button></div></section>`}
+
+async function changePw(){const p=prompt('رمز جدید (حداقل 6 حرف):');if(!p)return;if(p.length<6){toast('رمز باید حداقل 6 حرف باشه');return}try{await sbReq('/auth/v1/user','PUT',{password:p},await sbToken());toast('رمز عوض شد ✓')}catch(e){toast('تغییر رمز ممکن نشد: '+authMsg(String(e.message||e)))}}
 function forgotBanner(){const t=S.timer;if(t.status==='idle')return'';const ms=elapsedMs();if(ms<5*3600e3)return'';
 return`<div class="banner" style="background:#fde8e8;color:#b42318"><span>⚠️ تایمر مطالعه ${clock(ms)} روشنه. اگه یادت رفته خاموشش کنی، «پایان و اصلاح» رو بزن و مدت واقعی رو درست کن.</span><button class="btn sm red" onclick="timerStop()">پایان و اصلاح</button></div>`}
 
