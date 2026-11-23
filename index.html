@@ -535,7 +535,8 @@ function resetAll(){if(confirm('همه‌ی داده‌ها پاک بشه؟')&&c
 
 /* ---------- صفحه‌ی آزمون ---------- */
 let EX_SUBS=['ریاضی','فیزیک','شیمی'];
-function syncEx(){const l=S.settings.examSubjects;EX_SUBS=(Array.isArray(l)&&l.length?l:['ریاضی','فیزیک','شیمی']).slice()}
+function syncEx(){const l=S.settings.examSubjects;EX_SUBS=(Array.isArray(l)&&l.length?l:['ریاضی','فیزیک','شیمی']).slice();
+const t=S.settings.examTpl;if(t&&Array.isArray(l)&&l.length){const nm=t.sections.map(x=>x.name).filter(Boolean);if(nm.join('|')!==l.join('|')){const o={};t.sections.forEach(x=>o[x.name]=x);t.sections=l.map(n=>o[n]||{name:n,count:0,coef:(S.settings.examCoef||{})[n]||1})}const c=S.settings.examCoef||{};t.sections.forEach(x=>{if(x.name&&c[x.name]!=null)x.coef=c[x.name]})}}
 const f2=x=>(Math.round(x*100)/100).toFixed(2);
 const negK=()=>(S.settings.examTpl&&S.settings.examTpl.neg===false)?0:1/3;
 const exPct=(t,c,w)=>t>0?((c||0)-(w||0)*negK())/t*100:null;
@@ -947,15 +948,15 @@ function mkPlan(id){const m=S.mistakes.find(x=>x.id===id);if(!m)return;planAdd(m
 function mkDueToPlan(){const tk=todayKey();let n=0;dueMistakes().forEach(m=>{if(!S.plan.some(t=>t.date===tk&&t.subject===m.subject&&t.topic===(m.topic||'')&&t.note==='مرور نقطه‌ضعف')){planAdd(m.subject,m.topic||'','مرور نقطه‌ضعف');n++}});save();toast(n?fa(n)+' مرور به برنامه اضافه شد ✓':'قبلاً اضافه شده');render()}
 const SYL=['شروع نکردم','خوندم','تست زدم','مسلطم'];let sylOpen={};
 function sylAdd(i){const sub=mkSubs()[i],ta=$('sy_'+i);if(!ta)return;const L=S.syllabus[sub]=S.syllabus[sub]||[];ta.value.split('\n').map(x=>x.trim()).filter(Boolean).forEach(n=>{if(!L.some(t=>t.name===n))L.push({id:uid(),name:n,st:0})});sylOpen[i]=true;save();render()}
-function sylSt(sub,id){const t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(t){t.st=((t.st||0)+1)%4;save();render()}}
-function sylDel(sub,id){if(confirm('این مبحث حذف بشه؟')){S.syllabus[sub]=S.syllabus[sub].filter(x=>x.id!==id);save();render()}}
-function sylWeak(sub,id){const t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(!t)return;mkForm={subject:sub,topic:t.name,note:''};mkEditId=null;setView('mistakes')}
-function sylPlan(sub,id){const t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(!t)return;planAdd(sub,t.name,'');save();toast('به برنامه‌ی امروز اضافه شد ✓')}
+function sylSt(i,id){const sub=mkSubs()[i],t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(t){t.st=((t.st||0)+1)%4;save();render()}}
+function sylDel(i,id){const sub=mkSubs()[i];if(confirm('این مبحث حذف بشه؟')){S.syllabus[sub]=S.syllabus[sub].filter(x=>x.id!==id);save();render()}}
+function sylWeak(i,id){const sub=mkSubs()[i],t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(!t)return;mkForm={subject:sub,topic:t.name,note:''};mkEditId=null;setView('mistakes')}
+function sylPlan(i,id){const sub=mkSubs()[i],t=(S.syllabus[sub]||[]).find(x=>x.id===id);if(!t)return;planAdd(sub,t.name,'');save();toast('به برنامه‌ی امروز اضافه شد ✓')}
 function viewSyllabus(){const subs=mkSubs();let all=0,sum=0;
 const box=subs.map((sub,i)=>{const L=S.syllabus[sub]||[],p=L.length?L.reduce((a,t)=>a+(t.st||0),0)/(3*L.length)*100:0;all+=L.length;sum+=L.reduce((a,t)=>a+(t.st||0),0);
 return`<details class="card" ${sylOpen[i]?'open':''} ontoggle="sylOpen[${i}]=this.open"><summary style="cursor:pointer;font-weight:800"><i class="dot" style="background:${subjColor(sub)}"></i>${esc(sub)} <span class="muted small">· ${fa(L.filter(t=>t.st===3).length)} از ${fa(L.length)} مسلط · ${Math.round(p)}%</span></summary>
 <div class="prog" style="margin:8px 0"><i style="width:${p}%;background:${subjColor(sub)}"></i></div>
-${L.map(t=>`<div class="syt"><div class="n">${esc(t.name)}</div><button class="sst s${t.st||0}" onclick="sylSt('${esc(sub)}','${t.id}')">${SYL[t.st||0]}</button><button class="btn ghost sm" title="نقطه‌ضعف" onclick="sylWeak('${esc(sub)}','${t.id}')">🎯</button><button class="btn ghost sm" title="به برنامه‌ی امروز" onclick="sylPlan('${esc(sub)}','${t.id}')">📅</button><button class="btn ghost sm" onclick="sylDel('${esc(sub)}','${t.id}')">🗑</button></div>`).join('')}
+${L.map(t=>`<div class="syt"><div class="n">${esc(t.name)}</div><button class="sst s${t.st||0}" onclick="sylSt(${i},'${t.id}')">${SYL[t.st||0]}</button><button class="btn ghost sm" title="نقطه‌ضعف" onclick="sylWeak(${i},'${t.id}')">🎯</button><button class="btn ghost sm" title="به برنامه‌ی امروز" onclick="sylPlan(${i},'${t.id}')">📅</button><button class="btn ghost sm" onclick="sylDel(${i},'${t.id}')">🗑</button></div>`).join('')}
 <textarea id="sy_${i}" placeholder="مبحث‌ها رو بنویس، هر مبحث توی یه خط"></textarea><div class="row fit" style="margin-top:8px"><button class="btn sm" onclick="sylAdd(${i})">افزودن</button></div></details>`}).join('');
 return`<section class="card"><h2>📖 سرفصل‌ها</h2><div class="muted small">مبحث‌های هر درس رو اضافه کن و وضعیتش رو با زدن روی دکمه‌ی وضعیت عوض کن (شروع نکردم ← خوندم ← تست زدم ← مسلطم).${all?` پیشرفت کل: <b>${Math.round(sum/(3*all)*100)}%</b>`:''}</div></section>${box}`}
 function weeklyCard(){const tk=todayKey(),ws=addDays(tk,-wdIdx(tk)),days=[...Array(7)].map((_,i)=>addDays(ws,i)),pw=[...Array(7)].map((_,i)=>addDays(ws,i-7));
