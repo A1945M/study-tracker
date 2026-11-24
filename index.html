@@ -199,6 +199,8 @@ main{padding-bottom:88px}
 .sb.pick{background:#444;color:#fff}.sb.ok{background:#16a34a;color:#fff;border-color:#16a34a}.sb.bad{background:#dc2626;color:#fff;border-color:#dc2626}.sb.key{border:2.5px solid #16a34a;color:#16a34a;font-weight:800}
 .sbox{border:1.5px solid #111;border-radius:8px;padding:6px 8px;font-size:12px}.sbox.dash{border-style:dashed;line-height:1.9}.sl{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #ddd}
 @media print{body *{visibility:hidden}#sheet,#sheet *{visibility:visible}#sheet{position:absolute;top:0;right:0;zoom:1!important}}
+.hrs{display:flex;gap:2px;align-items:flex-end;height:84px;direction:ltr;margin:10px 0 4px}.hrs div{flex:1;text-align:center;font-size:9px;color:var(--muted)}.hrs i{display:block;background:var(--accent);border-radius:3px 3px 0 0;min-height:1px;margin-bottom:2px}
+.tbar{position:relative;height:10px;background:var(--line);border-radius:6px;margin:6px 0}.tbar i{position:absolute;right:0;top:0;bottom:0;background:var(--accent);border-radius:6px}.tbar b{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--text);border-radius:2px}
 </style>
 </head>
 <body>
@@ -277,12 +279,12 @@ const PRESET={
 'عربی':['ترجمه','قواعد','تحلیل صرفی','درک مطلب'],
 'دین و زندگی':['مفاهیم','ترجمه آیات','قرابت معنایی'],
 'زبان انگلیسی':['گرامر','لغت','کلوز تست','درک مطلب']};
-function defaultState(){return{v:1,sessions:[],days:{},settings:{dailyGoalMin:480,subjects:DEFAULT_SUBJECTS.map((n,i)=>({name:n,color:COLORS[i],goalH:0})),lastBackup:null,ui:{accent:"",mode:"auto",noAnim:false,vib:true},examCoef:{'ریاضی':4,'فیزیک':4,'شیمی':3},examSubjects:['ریاضی','فیزیک','شیمی'],alert:{every:0,sound:true,notify:true},konkurDate:''},timer:{status:'idle',startedAt:0,accumMs:0,subject:'',topic:'',note:'',dayKey:'',lastBlock:0},exams:[],mistakes:[],plan:[],routine:{items:[],log:{}},syllabus:{},room:null,pending:[],acts:[],actRun:null,actLog:[],notes:[],attend:{wakeBy:"08:00",reportBy:"23:59",log:{}},examDraft:null,examTimers:{exam:{status:'idle',startedAt:0,accumMs:0,alertMin:0,alerted:false},analysis:{status:'idle',startedAt:0,accumMs:0,target:'draft',alertMin:0,alerted:false}}}}
+function defaultState(){return{v:1,sessions:[],days:{},settings:{dailyGoalMin:480,subjects:DEFAULT_SUBJECTS.map((n,i)=>({name:n,color:COLORS[i],goalH:0})),lastBackup:null,ui:{accent:"",mode:"auto",noAnim:false,vib:true},examCoef:{'ریاضی':4,'فیزیک':4,'شیمی':3},examSubjects:['ریاضی','فیزیک','شیمی'],alert:{every:0,sound:true,notify:true},konkurDate:''},timer:{status:'idle',startedAt:0,accumMs:0,subject:'',topic:'',note:'',dayKey:'',lastBlock:0},exams:[],mistakes:[],plan:[],routine:{items:[],log:{}},syllabus:{},room:null,pending:[],targets:{},acts:[],actRun:null,actLog:[],notes:[],attend:{wakeBy:"08:00",reportBy:"23:59",log:{}},examDraft:null,examTimers:{exam:{status:'idle',startedAt:0,accumMs:0,alertMin:0,alerted:false},analysis:{status:'idle',startedAt:0,accumMs:0,target:'draft',alertMin:0,alerted:false}}}}
 function merge(o){const d=defaultState();const r=Object.assign(d,o,{settings:Object.assign(d.settings,o.settings||{}),timer:Object.assign(d.timer,o.timer||{})});
 r.settings.alert=Object.assign({every:0,sound:true,notify:true},r.settings.alert||{});r.settings.examCoef=r.settings.examCoef||{};
 if(!Array.isArray(r.settings.examSubjects)||!r.settings.examSubjects.length)r.settings.examSubjects=['ریاضی','فیزیک','شیمی'];
 const dt=defaultState().examTimers;['exam','analysis'].forEach(k=>r.examTimers[k]=Object.assign({},dt[k],(o&&o.examTimers&&o.examTimers[k])||{}));
-['sessions','exams','mistakes','plan'].forEach(k=>{if(!Array.isArray(r[k]))r[k]=[]});if(!r.routine||!Array.isArray(r.routine.items))r.routine={items:[],log:{}};r.routine.log=r.routine.log||{};if(!r.syllabus||typeof r.syllabus!=='object'||Array.isArray(r.syllabus))r.syllabus={};r.settings=r.settings||{};r.settings.ui=Object.assign({accent:'',mode:'auto',noAnim:false,vib:true},r.settings.ui||{});if(!Array.isArray(r.acts))r.acts=[];if(!Array.isArray(r.actLog))r.actLog=[];if(!Array.isArray(r.notes))r.notes=[];if(!Array.isArray(r.pending))r.pending=[];if(!r.attend||typeof r.attend!=='object')r.attend={};r.attend=Object.assign({wakeBy:'08:00',reportBy:'23:59'},r.attend);r.attend.log=r.attend.log||{};return r}
+['sessions','exams','mistakes','plan'].forEach(k=>{if(!Array.isArray(r[k]))r[k]=[]});if(!r.routine||!Array.isArray(r.routine.items))r.routine={items:[],log:{}};r.routine.log=r.routine.log||{};if(!r.syllabus||typeof r.syllabus!=='object'||Array.isArray(r.syllabus))r.syllabus={};r.settings=r.settings||{};r.settings.ui=Object.assign({accent:'',mode:'auto',noAnim:false,vib:true},r.settings.ui||{});if(!Array.isArray(r.acts))r.acts=[];if(!Array.isArray(r.actLog))r.actLog=[];if(!Array.isArray(r.notes))r.notes=[];if(!Array.isArray(r.pending))r.pending=[];if(!r.targets||typeof r.targets!=='object'||Array.isArray(r.targets))r.targets={};if(!r.attend||typeof r.attend!=='object')r.attend={};r.attend=Object.assign({wakeBy:'08:00',reportBy:'23:59'},r.attend);r.attend.log=r.attend.log||{};return r}
 function load(){try{const r=localStorage.getItem(KEY);if(r)return merge(JSON.parse(r))}catch(e){}return defaultState()}
 let S=load();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('ذخیره‌سازی ممکن نشد! از داده‌ها پشتیبان بگیر.')}cloudQueue()}
@@ -1111,11 +1113,12 @@ return`<section class="card"><div class="row" style="justify-content:space-betwe
 <div class="muted small" style="margin:6px 0">${N&&t.minutes?N+' سوال · '+t.minutes+' دقیقه · '+rng:'اول پایین، زمان و تعداد سوال هر درس رو تنظیم کن.'}</div>
 <input placeholder="اسم آزمون (اختیاری)" value="${esc(roomName)}" oninput="roomName=this.value">
 <div class="row" style="margin-top:12px;flex-wrap:nowrap"><button class="btn" style="flex:1;padding:18px 8px" onclick="roomStart()">▶ شروع آزمون</button><button class="btn ghost" style="flex:1;padding:18px 8px" onclick="roomKeyOpen()">✅ ثبت جواب${pn?' ('+pn+')':''}</button></div>
+<button class="btn ghost" style="width:100%;margin-top:8px;padding:14px" onclick="roomPage='an';render()">🔍 تحلیل آزمون (تایمر)</button>
 <div class="muted small" style="margin-top:8px">بعد از آزمون پاسخ‌هات ذخیره می‌شن. وقتی کلید رسید، «ثبت جواب» رو بزن، گزینه‌ی درست هر سوال رو انتخاب کن و آخرش «ثبت کلی» رو بزن تا ورقه‌ی نتیجه ساخته و ذخیره بشه.</div></section>${tplCard()}`}
 function viewExams(){roomMigrate();const R=S.room;if(R&&R.stage==='run')return roomRunView();
-if(roomPage==='hub')return roomHubView();if(roomPage==='keylist'&&S.pending.length)return roomKeyList();if(roomPage==='key'&&pendBy(roomSel))return roomKeyView();
+if(roomPage==='hub')return roomHubView();if(roomPage==='an')return roomAnView();if(roomPage==='keylist'&&S.pending.length)return roomKeyList();if(roomPage==='key'&&pendBy(roomSel))return roomKeyView();
 if(roomPage==='report'&&S.exams.some(x=>x.id===roomSel&&x.room))return roomReportView();roomPage='';
-return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🏫 اتاق آزمون</h2><button class="btn" style="flex:0 0 auto" onclick="roomPage='hub';render()">ورود${S.pending.length?' ('+S.pending.length+' منتظر کلید)':''}</button></div><div class="muted small" style="margin-top:6px">آزمون بده، جواب‌ها رو بعداً ثبت کن و ورقه‌ی نتیجه بگیر.</div></section>`+exAnalysis()+`<section class="card"><h2>آزمون‌های ثبت‌شده</h2>${exList()}</section><details class="card"><summary style="cursor:pointer;font-weight:700">ثبت دستی آزمون و تایمرها (بدون اتاق آزمون)</summary><div class="two">${exTimerCard('exam','⏱ تایمر آزمون')}${exTimerCard('analysis','🔍 تایمر تحلیل آزمون')}</div>${exForm()}</details>`}
+return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🏫 اتاق آزمون</h2><button class="btn" style="flex:0 0 auto" onclick="roomPage='hub';render()">ورود${S.pending.length?' ('+S.pending.length+' منتظر کلید)':''}</button></div><div class="muted small" style="margin-top:6px">آزمون بده، جواب‌ها رو بعداً ثبت کن و ورقه‌ی نتیجه بگیر.</div></section>`+exAnalysis()+targetsCard()+`<section class="card"><h2>آزمون‌های ثبت‌شده</h2>${exList()}</section><details class="card"><summary style="cursor:pointer;font-weight:700">ثبت دستی آزمون و تایمرها (بدون اتاق آزمون)</summary><div class="two">${exTimerCard('exam','⏱ تایمر آزمون')}${exTimerCard('analysis','🔍 تایمر تحلیل آزمون')}</div>${exForm()}</details>`}
 
 /* ======================= رشته‌ها و حالت مهمان ======================= */
 const FIELDS={
@@ -1128,6 +1131,57 @@ function fieldCard(){const f=S.settings.field||'';return`<section class="card"><
 function guestCard(){return`<section class="card"><h2>👤 حالت مهمان</h2><div class="muted small">اطلاعاتت فقط روی همین مرورگر ذخیره می‌شه و با پاک شدن اطلاعات مرورگر از بین می‌ره. برای همگام‌سازی بین دستگاه‌ها حساب بساز؛ اطلاعات فعلی‌ت منتقل می‌شه.</div><div class="row fit" style="margin-top:8px"><button class="btn" onclick="guestExit('signup')">ساخت حساب</button><button class="btn ghost" onclick="guestExit('login')">ورود به حساب</button></div></section>`}
 
 async function changePw(){const p=prompt('رمز جدید (حداقل 6 حرف):');if(!p)return;if(p.length<6){toast('رمز باید حداقل 6 حرف باشه');return}try{await sbReq('/auth/v1/user','PUT',{password:p},await sbToken());toast('رمز عوض شد ✓')}catch(e){toast('تغییر رمز ممکن نشد: '+authMsg(String(e.message||e)))}}
+/* ======================= اتاق تحلیل، هدف درصد، پیشنهاد فردا، ساعت مطالعه ======================= */
+const exSorted=()=>S.exams.slice().sort((a,b)=>b.date.localeCompare(a.date)||(b.ts||0)-(a.ts||0));
+function anTarget(){const t=S.examTimers.analysis;if(!S.exams.some(e=>e.id===t.target)){const n=exSorted()[0];t.target=n?n.id:'draft'}return t.target}
+function anManual(){const m=toN(val('an_min')),e=S.exams.find(x=>x.id===anTarget());if(!e){toast('اول یه آزمون انتخاب کن');return}if(!m){toast('تعداد دقیقه رو بنویس');return}
+e.analysisSec=(e.analysisSec||0)+m*60;(e.analysisLog=e.analysisLog||[]).push({date:todayKey(),sec:m*60,manual:true});save();render();toast('زمان ثبت شد ✓')}
+function anLogDel(id,i){const e=S.exams.find(x=>x.id===id);if(!e||!e.analysisLog||!e.analysisLog[i])return;if(!confirm('این زمان حذف بشه؟'))return;e.analysisSec=Math.max(0,(e.analysisSec||0)-e.analysisLog[i].sec);e.analysisLog.splice(i,1);save();render()}
+function roomAnView(){const ex=exSorted().slice(0,30),back=`<button class="btn ghost sm" style="flex:0 0 auto" onclick="roomPage='hub';render()">برگشت</button>`;
+if(!ex.length)return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🔍 تحلیل آزمون</h2>${back}</div><div class="empty">هنوز آزمونی ثبت نشده. اول آزمون بده و «ثبت جواب» رو کامل کن.</div></section>`;
+const tg=anTarget(),e=ex.find(x=>x.id===tg)||ex[0],st=S.examTimers.analysis.status,lg=e.analysisLog||[];
+return`<section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🔍 تحلیل آزمون</h2>${back}</div>
+<label class="f">تحلیل کدوم آزمون؟</label><select onchange="S.examTimers.analysis.target=this.value;save();render()">${ex.map(x=>`<option value="${x.id}" ${x.id===e.id?'selected':''}>${jDate(x.date,true)}${x.name?' – '+esc(x.name):''}</option>`).join('')}</select>
+<div class="clock" id="clk_analysis" style="text-align:center;font-size:42px;font-weight:800;direction:ltr;margin:14px 0 2px">${clock(exEl('analysis'))}</div>
+<div class="muted small" style="text-align:center">${st==='idle'?'آماده':st==='running'?'در حال اجرا… (با بستن برنامه هم ادامه داره)':'متوقف شده'}</div>
+<div class="row fit" style="justify-content:center;margin-top:10px">${st==='running'?'<button class="btn" onclick="etPause(\'analysis\')">⏸ توقف</button>':`<button class="btn" onclick="etStart('analysis')">▶ ${st==='paused'?'ادامه':'شروع'}</button>`}<button class="btn ghost" onclick="etCommit('analysis')">✔ ثبت زمان</button><button class="btn ghost" onclick="etReset('analysis')">↺</button></div></section>
+<section class="card"><h3 style="margin-top:0">ثبت دستی زمان</h3><div class="muted small">اگه فقط زمان تحلیل رو می‌خوای ثبت کنی، بدون تایمر.</div><div class="row" style="flex-wrap:nowrap;margin-top:6px"><input id="an_min" inputmode="numeric" placeholder="چند دقیقه؟"><button class="btn" style="flex:0 0 auto" onclick="anManual()">ثبت</button></div></section>
+<section class="card"><h3 style="margin-top:0">زمان تحلیل این آزمون: ${dur(e.analysisSec||0)}</h3>${lg.length?lg.map((l,i)=>`<div class="syt"><div class="n">${jDate(l.date,true)} · ${dur(l.sec)}${l.manual?' <span class="tag">دستی</span>':''}</div><button class="btn ghost sm" onclick="anLogDel('${e.id}',${i})">🗑</button></div>`).join(''):'<div class="empty">هنوز زمانی ثبت نشده.</div>'}</section>`}
+/* هدف درصد */
+function subjRecent(n){const L=exSorted().filter(e=>e.subs&&e.subs[n]&&e.subs[n].total>0).slice(0,3);if(!L.length)return null;return L.reduce((a,e)=>a+exPct(e.subs[n].total,e.subs[n].correct,e.subs[n].wrong),0)/L.length}
+function setTarget(i,v){const n=EX_SUBS[i],x=parseFloat(String(v).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));if(isNaN(x))delete S.targets[n];else S.targets[n]=Math.max(0,Math.min(100,x));save();render()}
+function targetsCard(){return`<section class="card"><h2>🎯 هدف درصد هر درس</h2><div class="muted small">هدفت رو بنویس. «درصد فعلی» میانگین ۳ آزمون آخره.</div>${EX_SUBS.map((n,i)=>{const cur=subjRecent(n),tg=S.targets[n],w=v=>Math.max(0,Math.min(100,v));
+return`<div style="margin-top:10px"><div class="row" style="justify-content:space-between;flex-wrap:nowrap;align-items:center"><b>${esc(n)}</b><span class="small muted">فعلی: ${cur==null?'—':pc2(cur)}</span><input inputmode="decimal" value="${tg==null?'':tg}" placeholder="هدف %" onchange="setTarget(${i},this.value)" style="max-width:84px"></div><div class="tbar">${cur!=null?`<i style="width:${w(cur)}%"></i>`:''}${tg!=null?`<b style="right:${w(tg)}%"></b>`:''}</div>${tg!=null&&cur!=null?`<div class="small ${tg>cur?'bad':'good'}">${tg>cur?pc2(tg-cur)+' تا هدف':'به هدف رسیدی ✓'}</div>`:''}</div>`}).join('')}</section>`}
+/* پیشنهاد فردا */
+const stNext=sub=>(S.syllabus[sub]||[]).find(t=>(t.st||0)<3);
+function study7(){const tk=todayKey(),f=addDays(tk,-6),m={};S.sessions.forEach(q=>{if(q.date>=f&&q.date<=tk)m[q.subject]=(m[q.subject]||0)+(q.sec||0)/60});return m}
+function suggestTomorrow(){const tk=todayKey(),tm=addDays(tk,1),total=S.settings.dailyGoalMin||240,it=[],add=(subject,topic,min,why,note)=>{if(!it.some(x=>x.subject===subject&&x.topic===topic))it.push({subject,topic,min,why,note:note||''})};
+S.mistakes.filter(m=>!m.done&&m.next&&m.next<=tm).slice(0,3).forEach(m=>add(m.subject,m.topic||'',20,'مرور نقطه‌ضعف','مرور نقطه‌ضعف'));
+EX_SUBS.map(n=>{const cur=subjRecent(n),tg=S.targets[n];return{n,tg,gap:cur==null?0:(tg!=null?tg-cur:(100-cur)*0.3)}}).filter(g=>g.gap>0).sort((a,b)=>b.gap-a.gap).slice(0,2).forEach(g=>{const t=stNext(g.n);add(g.n,t?t.name:'',60,g.tg!=null?Math.round(g.gap)+'% تا هدف':'درصد آزمونت پایینه')});
+const m7=study7(),subs=S.settings.subjects.map(x=>x.name).sort((a,b)=>(m7[a]||0)-(m7[b]||0));let i=0;
+while(it.reduce((a,x)=>a+x.min,0)<total*0.9&&i<subs.length&&it.length<8){const sb=subs[i++];if(it.some(x=>x.subject===sb))continue;const t=stNext(sb);add(sb,t?t.name:'',45,(m7[sb]||0)<30?'این هفته کم خوندی':'تعادل درس‌ها')}
+return it}
+function suggList(){const tm=addDays(todayKey(),1);return suggestTomorrow().filter(x=>!S.plan.some(t=>t.date===tm&&t.subject===x.subject&&t.topic===x.topic))}
+function suggPush(x){S.plan.push({id:uid(),ts:Date.now(),date:addDays(todayKey(),1),done:false,subject:x.subject,topic:x.topic,min:x.min,tests:0,note:x.note})}
+function suggAdd(i){const x=suggList()[i];if(!x)return;suggPush(x);save();render();toast('به برنامه‌ی فردا اضافه شد ✓')}
+function suggAll(){const L=suggList();L.forEach(suggPush);save();render();toast(L.length+' کار به برنامه‌ی فردا اضافه شد ✓')}
+let suggOpen=false;
+function suggestCard(){const L=suggList();if(!L.length)return'';const sum=L.reduce((a,x)=>a+x.min,0);
+return`<details class="card" ${suggOpen?'open':''} ontoggle="suggOpen=this.open"><summary style="cursor:pointer;font-weight:800">💡 پیشنهاد برنامه‌ی فردا <span class="muted small">(${L.length} کار · ${dur(sum*60)})</span></summary>${L.map((x,i)=>`<div class="syt"><div class="n"><i class="dot" style="background:${subjColor(x.subject)}"></i><b>${esc(x.subject)}</b>${x.topic?' – '+esc(x.topic):''}<div class="small muted">${x.min} دقیقه · ${esc(x.why)}</div></div><button class="btn ghost sm" onclick="suggAdd(${i})">+</button></div>`).join('')}<div class="row fit" style="margin-top:8px"><button class="btn sm" onclick="suggAll()">همه رو به برنامه‌ی فردا اضافه کن</button></div><div class="muted small" style="margin-top:6px">بر اساس مرورهای نقاط ضعف، درصد آزمون‌ها و هدفت، سرفصل‌هایی که مسلط نیستی و درس‌هایی که این هفته کم خوندی ساخته شده.</div></details>`}
+const _vp=viewPlan;viewPlan=function(){return suggestCard()+_vp()};
+/* بهترین ساعت مطالعه */
+function hourStats(){const mins=Array(24).fill(0),blk={},B=h=>h<5?'بامداد':h<11?'صبح':h<15?'ظهر':h<19?'عصر':'شب';
+S.sessions.forEach(q=>{if(q.source!=='timer'||!(q.sec>0)||!q.ts)return;let t=q.ts-q.sec*1000;const end=q.ts;
+while(t<end){const d=new Date(t),nx=Math.min(end,new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours()+1).getTime());mins[d.getHours()]+=(nx-t)/60000;t=nx}
+const b=B(new Date(q.ts-q.sec*1000).getHours()),c=q.correct||0,w=q.wrong||0;if(c+w>0){const o=blk[b]=blk[b]||{c:0,w:0};o.c+=c;o.w+=w}});return{mins,blk}}
+function hoursCard(){const {mins,blk}=hourStats(),tot=mins.reduce((a,b)=>a+b,0);
+if(tot<30)return`<section class="card"><h2>🕒 بهترین ساعت مطالعه</h2><div class="empty">بعد از چند جلسه با تایمر، اینجا می‌فهمی توی کدوم ساعت‌ها بیشتر درس می‌خونی.</div></section>`;
+const mx=Math.max(...mins);let best=0,bi=0;for(let h=0;h<24;h++){const v=mins[h]+mins[(h+1)%24];if(v>best){best=v;bi=h}}
+const acc=Object.entries(blk).filter(([,o])=>o.c+o.w>=10).map(([k,o])=>[k,o.c/(o.c+o.w)*100]).sort((a,b)=>b[1]-a[1]);
+return`<section class="card"><h2>🕒 بهترین ساعت مطالعه</h2><div class="hrs">${mins.map((m,h)=>`<div title="${h}:00 · ${Math.round(m)} دقیقه"><i style="height:${m/mx*62}px"></i>${h%3===0?h:'&nbsp;'}</div>`).join('')}</div>
+<div>بیشترین مطالعه‌ات بین ساعت <b dir="ltr">${pad(bi)}:00</b> تا <b dir="ltr">${pad((bi+2)%24)}:00</b> بوده (${dur(best*60)}).</div>${acc.length?`<div style="margin-top:4px">دقت پاسخ‌ها توی «${acc[0][0]}» از همه بهتره (${Math.round(acc[0][1])}%)${acc.length>1?` و توی «${acc[acc.length-1][0]}» از همه کمتره (${Math.round(acc[acc.length-1][1])}%)`:''}. درس‌های سخت رو بذار توی بازه‌ی بهترت.</div>`:'<div class="muted small" style="margin-top:4px">برای مقایسه‌ی دقت، جلسه‌هایی با تعداد درست و غلط ثبت کن.</div>'}<div class="muted small" style="margin-top:6px">فقط جلسه‌هایی که با تایمر ثبت شدن حساب می‌شن.</div></section>`}
+const _va3=viewAnalysis;viewAnalysis=function(){return _va3()+hoursCard()};
+
 function forgotBanner(){const t=S.timer;if(t.status==='idle')return'';const ms=elapsedMs();if(ms<5*3600e3)return'';
 return`<div class="banner" style="background:#fde8e8;color:#b42318"><span>⚠️ تایمر مطالعه ${clock(ms)} روشنه. اگه یادت رفته خاموشش کنی، «پایان و اصلاح» رو بزن و مدت واقعی رو درست کن.</span><button class="btn sm red" onclick="timerStop()">پایان و اصلاح</button></div>`}
 
